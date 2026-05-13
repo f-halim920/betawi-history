@@ -80,7 +80,6 @@ function Index() {
           )}
           <Link
             to="/play"
-            search={{ restart: hasSave ? 1 : undefined }}
             onClick={() => {
               if (hasSave) clear();
             }}
