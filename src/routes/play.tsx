@@ -1,10 +1,18 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { useEffect, useState, useCallback, useRef } from "react";
-import { DIALOGUE, type DialogueNode, type VocabWord } from "@/lib/game-data";
+import { useEffect, useState, useCallback, useRef, useMemo } from "react";
+import {
+  DIALOGUE,
+  NPCS,
+  type DialogueNode,
+  type Npc,
+  type NpcId,
+  type VocabWord,
+} from "@/lib/game-data";
 import { useCollectedWords, useProgress } from "@/lib/game-store";
 import scene from "@/assets/scene-market.png";
-import mc from "@/assets/char-mc.png";
-import merchant from "@/assets/char-merchant.png";
+import mcImg from "@/assets/char-mc.png";
+import merchantImg from "@/assets/char-merchant.png";
+import corneliaImg from "@/assets/char-cornelia.png";
 
 export const Route = createFileRoute("/play")({
   head: () => ({
@@ -16,11 +24,21 @@ export const Route = createFileRoute("/play")({
   component: Play,
 });
 
-// World positions in % of screen width
-const NPC_X = 78;
-const MC_START_X = 20;
+const NPC_SPRITES: Record<NpcId, string> = {
+  merchant: merchantImg,
+  cornelia: corneliaImg,
+};
+
+const MC_START_X = 55;
 const MOVE_SPEED = 28; // % per second
-const INTERACT_DISTANCE = 18; // % distance to trigger interaction prompt
+const INTERACT_DISTANCE = 8; // % distance to trigger interaction prompt
+const MIN_X = 4;
+const MAX_X = 96;
+
+// Shared ground baseline — every character's feet sit here
+const GROUND_BOTTOM = "6%";
+// Sprite size — chibi, modest
+const SPRITE_HEIGHT = "h-[36vh] max-h-[340px]";
 
 type Mode = "explore" | "dialogue";
 
@@ -33,8 +51,10 @@ function Play() {
   const [mcX, setMcX] = useState(MC_START_X);
   const [facing, setFacing] = useState<"left" | "right">("right");
   const [walking, setWalking] = useState(false);
+  const [bobFrame, setBobFrame] = useState(0);
   const keysRef = useRef<Set<string>>(new Set());
 
+  const [activeNpc, setActiveNpc] = useState<NpcId | null>(null);
   const [currentId, setCurrentId] = useState<string>("start");
   const [lineIndex, setLineIndex] = useState(0);
   const [typed, setTyped] = useState("");
@@ -42,12 +62,16 @@ function Play() {
   const [popupWord, setPopupWord] = useState<VocabWord | null>(null);
   const [hydrated, setHydrated] = useState(false);
 
-  // Hydrate from save on mount — if there is a saved dialogue node, jump straight into dialogue
+  // Hydrate from save: figure out which NPC the saved node belongs to
   useEffect(() => {
     if (nodeId && DIALOGUE[nodeId]) {
+      const npc =
+        NPCS.find((n) => nodeId.startsWith("corn_") && n.id === "cornelia") ??
+        NPCS.find((n) => n.id === "merchant")!;
+      setActiveNpc(npc.id);
       setCurrentId(nodeId);
       setMode("dialogue");
-      setMcX(NPC_X - INTERACT_DISTANCE + 4);
+      setMcX(npc.x - 4);
     }
     setHydrated(true);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -61,11 +85,27 @@ function Play() {
     if (hydrated && mode === "dialogue" && node && !node.end) save(currentId);
   }, [currentId, hydrated, node, save, mode]);
 
+  // Find nearest interactable NPC
+  const nearestNpc: Npc | null = useMemo(() => {
+    if (mode !== "explore") return null;
+    let best: Npc | null = null;
+    let bestDist = Infinity;
+    for (const npc of NPCS) {
+      const d = Math.abs(mcX - npc.x);
+      if (d <= INTERACT_DISTANCE && d < bestDist) {
+        best = npc;
+        bestDist = d;
+      }
+    }
+    return best;
+  }, [mcX, mode]);
+
   // Movement loop (explore mode)
   useEffect(() => {
     if (mode !== "explore") return;
     let raf = 0;
     let last = performance.now();
+    let bobTimer = 0;
     const tick = (now: number) => {
       const dt = (now - last) / 1000;
       last = now;
@@ -76,9 +116,15 @@ function Play() {
       if (dir !== 0) {
         setFacing(dir > 0 ? "right" : "left");
         setWalking(true);
-        setMcX((x) => Math.max(4, Math.min(NPC_X - 6, x + dir * MOVE_SPEED * dt)));
+        setMcX((x) => Math.max(MIN_X, Math.min(MAX_X, x + dir * MOVE_SPEED * dt)));
+        bobTimer += dt;
+        if (bobTimer > 0.18) {
+          bobTimer = 0;
+          setBobFrame((f) => (f + 1) % 2);
+        }
       } else {
         setWalking(false);
+        setBobFrame(0);
       }
       raf = requestAnimationFrame(tick);
     };
@@ -86,15 +132,16 @@ function Play() {
     return () => cancelAnimationFrame(raf);
   }, [mode]);
 
-  const distance = Math.abs(mcX - NPC_X);
-  const canInteract = mode === "explore" && distance <= INTERACT_DISTANCE;
-
-  const startDialogue = useCallback(() => {
-    if (!canInteract) return;
-    setMode("dialogue");
-    setCurrentId("start");
-    setLineIndex(0);
-  }, [canInteract]);
+  const startDialogue = useCallback(
+    (npc: Npc | null) => {
+      if (!npc) return;
+      setActiveNpc(npc.id);
+      setMode("dialogue");
+      setCurrentId(npc.startNodeId);
+      setLineIndex(0);
+    },
+    []
+  );
 
   // Collect word when line appears
   useEffect(() => {
@@ -124,6 +171,12 @@ function Play() {
     }, 22);
     return () => clearInterval(interval);
   }, [line, mode]);
+
+  const exitDialogue = useCallback(() => {
+    setMode("explore");
+    setActiveNpc(null);
+    clear();
+  }, [clear]);
 
   const advance = useCallback(() => {
     if (mode !== "dialogue" || !node) return;
@@ -155,9 +208,9 @@ function Play() {
       keysRef.current.add(e.key);
       if (mode === "explore") {
         if (e.key === "e" || e.key === "E" || e.code === "Space" || e.code === "Enter") {
-          if (canInteract) {
+          if (nearestNpc) {
             e.preventDefault();
-            startDialogue();
+            startDialogue(nearestNpc);
           }
         }
       } else {
@@ -176,9 +229,8 @@ function Play() {
       window.removeEventListener("keydown", onDown);
       window.removeEventListener("keyup", onUp);
     };
-  }, [advance, mode, canInteract, startDialogue]);
+  }, [advance, mode, nearestNpc, startDialogue]);
 
-  // Touch controls helpers
   const press = (key: string, down: boolean) => {
     if (down) keysRef.current.add(key);
     else keysRef.current.delete(key);
@@ -203,15 +255,17 @@ function Play() {
   const speakerName =
     line?.speaker === "mc"
       ? "Sanip"
-      : line?.speaker === "merchant"
-        ? "Tuan Van Houten"
-        : null;
+      : line?.speaker === "narrator"
+        ? null
+        : NPCS.find((n) => n.id === line?.speaker)?.name ?? null;
   const speakerColor =
     line?.speaker === "mc"
       ? "text-betawi"
-      : line?.speaker === "merchant"
-        ? "text-dutch"
-        : "text-gold";
+      : line?.speaker === "narrator"
+        ? "text-gold"
+        : NPCS.find((n) => n.id === line?.speaker)?.colorClass ?? "text-dutch";
+
+  const bobOffset = walking ? (bobFrame === 0 ? -3 : 0) : 0;
 
   return (
     <div
@@ -244,53 +298,63 @@ function Play() {
         </Link>
       </div>
 
-      {/* World — characters positioned by % */}
+      {/* World — characters all stand on the same ground line */}
       <div className="absolute inset-0 z-10 pointer-events-none">
-        {/* Merchant (NPC) — fixed */}
+        {/* NPCs */}
+        {NPCS.map((npc) => {
+          const isSpeaking =
+            mode === "dialogue" && activeNpc === npc.id && line?.speaker === npc.id;
+          const isActive = activeNpc === npc.id;
+          const isHighlighted = nearestNpc?.id === npc.id;
+          return (
+            <img
+              key={npc.id}
+              src={NPC_SPRITES[npc.id]}
+              alt={npc.name}
+              loading="lazy"
+              style={{ left: `${npc.x}%`, bottom: GROUND_BOTTOM }}
+              className={`pixel absolute ${SPRITE_HEIGHT} -translate-x-1/2 transition-all duration-300 ${
+                isSpeaking
+                  ? "scale-105 brightness-110"
+                  : mode === "dialogue" && !isActive
+                    ? "scale-95 brightness-50 saturate-50"
+                    : isHighlighted
+                      ? "brightness-110 drop-shadow-[0_0_12px_rgba(255,200,80,0.7)]"
+                      : "brightness-95"
+              }`}
+            />
+          );
+        })}
+
+        {/* MC */}
         <img
-          src={merchant}
-          alt="Tuan Van Houten"
-          style={{ left: `${NPC_X}%` }}
-          className={`pixel absolute bottom-[24%] h-[58vh] max-h-[620px] -translate-x-1/2 transition-all duration-300 ${
-            mode === "dialogue" && line?.speaker === "merchant"
-              ? "scale-105 brightness-110"
-              : mode === "dialogue"
-                ? "scale-100 brightness-50 saturate-50"
-                : canInteract
-                  ? "brightness-110 drop-shadow-[0_0_12px_rgba(255,200,80,0.6)]"
-                  : "brightness-95"
-          }`}
-        />
-        {/* MC — movable */}
-        <img
-          src={mc}
+          src={mcImg}
           alt="Sanip"
           style={{
             left: `${mcX}%`,
-            transform: `translateX(-50%) scaleX(${facing === "right" ? 1 : -1}) translateY(${
-              walking ? "-4px" : "0"
-            })`,
+            bottom: GROUND_BOTTOM,
+            transform: `translateX(-50%) scaleX(${facing === "right" ? 1 : -1}) translateY(${bobOffset}px)`,
           }}
-          className={`pixel absolute bottom-[24%] h-[58vh] max-h-[620px] transition-[filter] duration-300 ${
+          className={`pixel absolute ${SPRITE_HEIGHT} transition-[filter] duration-300 ${
             mode === "dialogue" && line?.speaker === "mc"
               ? "brightness-110"
               : mode === "dialogue"
-                ? "brightness-50 saturate-50"
+                ? "brightness-90"
                 : "brightness-105"
           }`}
         />
 
-        {/* Interaction prompt above NPC */}
-        {canInteract && (
+        {/* Interaction prompt above nearest NPC */}
+        {nearestNpc && mode === "explore" && (
           <div
-            style={{ left: `${NPC_X}%` }}
-            className="absolute bottom-[80%] -translate-x-1/2 animate-float-up"
+            style={{ left: `${nearestNpc.x}%`, bottom: `calc(${GROUND_BOTTOM} + 36vh)` }}
+            className="absolute -translate-x-1/2 animate-float-up"
           >
             <button
-              onClick={startDialogue}
+              onClick={() => startDialogue(nearestNpc)}
               className="pointer-events-auto border-4 border-gold bg-card/95 px-4 py-2 font-pixel text-[10px] text-gold shadow-2xl"
             >
-              ▼ Tekan E untuk Bicara
+              ▼ Tekan E — {nearestNpc.name}
             </button>
           </div>
         )}
@@ -309,7 +373,7 @@ function Play() {
         </div>
       )}
 
-      {/* Explore HUD: hint + on-screen controls */}
+      {/* Explore HUD */}
       {mode === "explore" && (
         <>
           <div className="pointer-events-none absolute bottom-6 left-1/2 z-20 -translate-x-1/2">
@@ -318,7 +382,7 @@ function Play() {
             </div>
           </div>
 
-          {/* Touch / mouse D-pad for mobile */}
+          {/* Touch D-pad */}
           <div className="absolute bottom-20 left-4 z-20 flex gap-2 sm:hidden">
             <button
               onPointerDown={() => press("ArrowLeft", true)}
@@ -340,8 +404,8 @@ function Play() {
             </button>
           </div>
           <button
-            onClick={startDialogue}
-            disabled={!canInteract}
+            onClick={() => startDialogue(nearestNpc)}
+            disabled={!nearestNpc}
             className="absolute bottom-20 right-4 z-20 h-14 w-20 border-4 border-gold bg-card/90 font-pixel text-[10px] text-gold disabled:opacity-30 active:bg-gold active:text-card sm:hidden"
             aria-label="Berinteraksi"
           >
@@ -392,22 +456,31 @@ function Play() {
                 <button
                   onClick={(e) => {
                     e.stopPropagation();
-                    clear();
-                    navigate({ to: "/dictionary" });
+                    exitDialogue();
                   }}
                   className="bg-primary px-5 py-3 font-pixel text-xs text-primary-foreground transition hover:brightness-110"
+                >
+                  ✦ JELAJAH LAGI
+                </button>
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    exitDialogue();
+                    navigate({ to: "/dictionary" });
+                  }}
+                  className="border-2 border-primary bg-card px-5 py-3 font-pixel text-xs text-primary transition hover:bg-primary hover:text-primary-foreground"
                 >
                   📖 LIHAT KAMUS
                 </button>
                 <button
                   onClick={(e) => {
                     e.stopPropagation();
-                    clear();
+                    exitDialogue();
                     navigate({ to: "/" });
                   }}
                   className="border-2 border-primary bg-card px-5 py-3 font-pixel text-xs text-primary transition hover:bg-primary hover:text-primary-foreground"
                 >
-                  ← KEMBALI KE MENU
+                  ← MENU
                 </button>
               </div>
             )}
@@ -422,6 +495,7 @@ function Play() {
           </div>
         </div>
       )}
+
     </div>
   );
 }
