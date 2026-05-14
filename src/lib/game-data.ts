@@ -83,7 +83,61 @@ export const VOCABULARY: Record<string, VocabWord> = {
     example: "“Sewa kontrakan ini mesti bayar persekot dulu sebulan.”",
     level: "advance",
   },
+  buncis: {
+    id: "buncis",
+    original: "boontjes",
+    language: "Belanda",
+    literal: "Kacang-kacangan kecil panjang",
+    betawi: "Buncis — sayur kacang panjang hijau",
+    example: "“Tumis buncis pake bawang putih enak banget buat lauk.”",
+    level: "common",
+  },
+  wortel: {
+    id: "wortel",
+    original: "wortel",
+    language: "Belanda",
+    literal: "Akar sayur berwarna oranye",
+    betawi: "Wortel — sayur akar oranye",
+    example: "“Sup ayam mesti pake wortel biar manis.”",
+    level: "common",
+  },
+  kol: {
+    id: "kol",
+    original: "kool",
+    language: "Belanda",
+    literal: "Sayur berdaun bulat berlapis",
+    betawi: "Kol — kubis, sayur daun bulat",
+    example: "“Bikin asinan kol mentah seger banget pas siang bolong.”",
+    level: "advance",
+  },
 };
+
+// NPC registry — used by the scene to spawn characters and route dialogue
+export type NpcId = "merchant" | "cornelia";
+export type Npc = {
+  id: NpcId;
+  name: string;
+  x: number; // % horizontal position in scene
+  startNodeId: string;
+  colorClass: string; // tailwind text color for speaker name
+};
+
+export const NPCS: Npc[] = [
+  {
+    id: "merchant",
+    name: "Tuan Van Houten",
+    x: 32,
+    startNodeId: "start",
+    colorClass: "text-dutch",
+  },
+  {
+    id: "cornelia",
+    name: "Nyonya Cornelia",
+    x: 78,
+    startNodeId: "corn_start",
+    colorClass: "text-dutch",
+  },
+];
 
 export const DIALOGUE: Record<string, DialogueNode> = {
   start: {
