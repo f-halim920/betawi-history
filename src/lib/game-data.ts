@@ -9,7 +9,7 @@ export type VocabWord = {
 };
 
 export type DialogueLine = {
-  speaker: "mc" | "merchant" | "narrator";
+  speaker: "mc" | "merchant" | "cornelia" | "narrator";
   text: string;
   // If this line introduces a new word, store it
   word?: VocabWord;
@@ -322,6 +322,84 @@ export const DIALOGUE: Record<string, DialogueNode> = {
       {
         speaker: "narrator",
         text: "Buka 📖 Kamus untuk melihat semua kata yang sudah kau kumpulkan.",
+      },
+    ],
+    end: true,
+  },
+  corn_start: {
+    id: "corn_start",
+    lines: [
+      {
+        speaker: "cornelia",
+        text: "Goedemiddag, jongen! Mau lihat sayur segar dari kebunku?",
+      },
+      {
+        speaker: "mc",
+        text: "Wah, banyak sekali sayuran yang belum kukenal, Nyonya.",
+      },
+      {
+        speaker: "cornelia",
+        text: "Ini namanya wortel — akar manis warna oranye. Bagus untuk sup!",
+        word: VOCABULARY.wortel,
+      },
+      {
+        speaker: "narrator",
+        text: "📖 Kata baru tersimpan: WORTEL",
+      },
+    ],
+    next: "corn_buncis",
+  },
+  corn_buncis: {
+    id: "corn_buncis",
+    lines: [
+      {
+        speaker: "cornelia",
+        text: "Dan ini boontjes — kacang panjang hijau. Enak ditumis dengan bawang.",
+        word: VOCABULARY.buncis,
+      },
+      {
+        speaker: "mc",
+        text: "Boontjes... orang-orang di kampungku mungkin akan menyebutnya 'buncis' nanti.",
+      },
+      {
+        speaker: "narrator",
+        text: "📖 Kata baru tersimpan: BOONTJES → BUNCIS",
+      },
+    ],
+    choices: [
+      { text: "“Ada sayur lain, Nyonya?”", nextId: "corn_kol" },
+      { text: "“Cukup dulu, terima kasih.”", nextId: "corn_end" },
+    ],
+  },
+  corn_kol: {
+    id: "corn_kol",
+    lines: [
+      {
+        speaker: "cornelia",
+        text: "Tentu! Kool ini — daunnya berlapis-lapis, bagus untuk asinan.",
+        word: VOCABULARY.kol,
+      },
+      {
+        speaker: "mc",
+        text: "Kool... terdengar seperti 'kol'. Akan kuingat.",
+      },
+      {
+        speaker: "narrator",
+        text: "📖 Kata baru tersimpan: KOOL → KOL",
+      },
+    ],
+    next: "corn_end",
+  },
+  corn_end: {
+    id: "corn_end",
+    lines: [
+      {
+        speaker: "cornelia",
+        text: "Datang lagi ya, jongen! Tot ziens!",
+      },
+      {
+        speaker: "mc",
+        text: "(Nyonya Cornelia ramah sekali. Sayurannya pun terdengar lezat...)",
       },
     ],
     end: true,
