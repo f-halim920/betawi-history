@@ -65,9 +65,9 @@ function Play() {
   // Hydrate from save: figure out which NPC the saved node belongs to
   useEffect(() => {
     if (nodeId && DIALOGUE[nodeId]) {
-      const npc = NPCS.find((n) =>
-        nodeId === n.startNodeId || nodeId.startsWith(n.id === "cornelia" ? "corn_" : "")
-      ) ?? NPCS[0];
+      const npc =
+        NPCS.find((n) => nodeId.startsWith("corn_") && n.id === "cornelia") ??
+        NPCS.find((n) => n.id === "merchant")!;
       setActiveNpc(npc.id);
       setCurrentId(nodeId);
       setMode("dialogue");
