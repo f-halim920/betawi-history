@@ -496,8 +496,6 @@ function Play() {
         </div>
       )}
 
-      {/* Use activeNpcData to silence unused warning when needed */}
-      {activeNpcData ? null : null}
     </div>
   );
 }
