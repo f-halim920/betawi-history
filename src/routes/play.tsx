@@ -252,8 +252,7 @@ function Play() {
     lineIndex === node.lines.length - 1 &&
     node.end;
 
-  const _activeNpcData = activeNpc ? NPCS.find((n) => n.id === activeNpc) : null;
-  void _activeNpcData;
+  const speakerName =
     line?.speaker === "mc"
       ? "Sanip"
       : line?.speaker === "narrator"
