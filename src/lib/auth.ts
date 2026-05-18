@@ -1,8 +1,9 @@
 import { useEffect, useState, useCallback } from "react";
+import { supabase } from "./supabase";
 
 const KEY = "asalcomot:auth";
 
-export type AuthUser = { username: string };
+export type AuthUser = { username: string; nis: string };
 
 export function useAuth() {
   const [user, setUser] = useState<AuthUser | null>(null);
@@ -26,26 +27,61 @@ export function useAuth() {
     };
   }, []);
 
-  const login = useCallback((username: string, password: string) => {
-    // NOTE: Untuk MVP, validasi sederhana: username & NIS (password) wajib diisi.
-    // Validasi terhadap database real (Google Sheet Vistrasaka/Sakravara) butuh
-    // integrasi backend (Lovable Cloud) + upload CSV ke project — bisa ditambah berikutnya.
+  const login = useCallback(async (username: string, password: string) => {
     if (!username.trim() || !password.trim()) {
       return { ok: false, error: "Username dan NIS wajib diisi." };
     }
-    if (password.trim().length < 3) {
-      return { ok: false, error: "NIS minimal 3 karakter." };
+
+    const nis = password.trim();
+
+    // Cek ke Supabase database "players"
+    const { data, error } = await supabase
+      .from("players")
+      .select("*")
+      .eq("nis", nis)
+      .single();
+
+    if (error || !data) {
+      return { ok: false, error: "Username atau NIS tidak ditemukan di database." };
     }
-    const u: AuthUser = { username: username.trim() };
+
+    // Pastikan username lumayan cocok
+    if (data.username.toLowerCase() !== username.trim().toLowerCase()) {
+      return { ok: false, error: "Username tidak cocok dengan NIS tersebut." };
+    }
+
+    // Tarik progres dari Supabase
+    const { data: prog } = await supabase.from("progress").select("*").eq("nis", nis).single();
+    if (prog) {
+      if (prog.words) localStorage.setItem("asalcomot:words", JSON.stringify(prog.words));
+      else localStorage.setItem("asalcomot:words", "[]");
+    } else {
+      // Jika belum ada progress, buat row baru
+      await supabase.from("progress").insert({ nis: nis, words: [] });
+      localStorage.setItem("asalcomot:words", "[]");
+    }
+
+    const u: AuthUser = { username: data.username, nis: data.nis };
     localStorage.setItem(KEY, JSON.stringify(u));
     window.dispatchEvent(new Event("auth-updated"));
+    
+    // Trigger update untuk kamus
+    window.dispatchEvent(new Event("words-updated"));
+    
     setUser(u);
     return { ok: true as const };
   }, []);
 
   const logout = useCallback(() => {
     localStorage.removeItem(KEY);
+    // Hapus sesi game lokal juga
+    localStorage.removeItem("asalcomot:words");
+    localStorage.removeItem("asalcomot:progress");
+    localStorage.removeItem("asalcomot:scene");
+    localStorage.removeItem("asalcomot:intro-seen");
+    
     window.dispatchEvent(new Event("auth-updated"));
+    window.dispatchEvent(new Event("words-updated"));
     setUser(null);
   }, []);
 

@@ -174,6 +174,10 @@ function Play() {
 
   // Collect word
   useEffect(() => {
+    if (mode === "explore" || mode === "scene-select") {
+      setPopupWord(null);
+      return;
+    }
     if (mode !== "dialogue") return;
     if (line?.word) {
       collect(line.word.id);
@@ -522,8 +526,8 @@ function Play() {
       {/* Explore HUD */}
       {mode === "explore" && (
         <>
-          <div className="pointer-events-none absolute bottom-6 left-1/2 z-20 -translate-x-1/2">
-            <div className="border-2 border-primary bg-card/90 px-4 py-2 font-mono-pixel text-lg text-foreground shadow-xl">
+          <div className="pointer-events-none absolute bottom-4 left-1/2 z-20 -translate-x-1/2">
+            <div className="border-2 border-primary bg-card/90 px-3 py-1.5 font-mono-pixel text-sm text-foreground shadow-xl whitespace-nowrap sm:text-base">
               ← → / A D untuk jalan · E / klik karakter untuk ngobrol
             </div>
           </div>
@@ -557,25 +561,25 @@ function Play() {
 
       {/* Dialogue box */}
       {mode === "dialogue" && node && line && (
-        <div className="absolute bottom-0 left-0 right-0 z-20 p-4 sm:p-6">
-          <div className="relative mx-auto max-w-5xl border-4 border-primary bg-card/95 p-5 shadow-2xl backdrop-blur sm:p-6">
+        <div className="absolute bottom-2 left-0 right-0 z-20 px-2 sm:px-4">
+          <div className="relative mx-auto max-w-4xl border-4 border-primary bg-card/95 px-4 py-2 shadow-2xl backdrop-blur sm:px-5 sm:py-3">
             {speakerName && (
-              <div className={`absolute -top-7 left-4 border-4 border-primary bg-card px-4 py-2 font-pixel text-xs ${speakerColor}`}>
+              <div className={`absolute -top-6 left-4 border-4 border-primary bg-card px-3 py-1 font-pixel text-[10px] sm:text-xs ${speakerColor}`}>
                 {speakerName}
               </div>
             )}
-            <p className="min-h-[5.5rem] font-mono-pixel text-2xl leading-relaxed text-foreground sm:text-[1.6rem]">
+            <p className="min-h-[2.5rem] font-mono-pixel text-lg leading-relaxed text-foreground sm:text-xl">
               {line.speaker === "narrator" ? <em>{typed}</em> : typed}
               {isTyping && <span className="ml-1 animate-blink text-primary">▊</span>}
             </p>
 
             {showChoices && (
-              <div className="mt-4 flex flex-col gap-2">
+              <div className="mt-2 flex flex-col gap-2">
                 {node.choices!.map((c, i) => (
                   <button
                     key={i}
                     onClick={(e) => { e.stopPropagation(); choose(c.nextId); }}
-                    className="group border-2 border-border bg-background/60 px-4 py-3 text-left font-mono-pixel text-xl text-foreground hover:border-primary hover:bg-primary hover:text-primary-foreground"
+                    className="group border-2 border-border bg-background/60 px-3 py-2 text-left font-mono-pixel text-lg text-foreground hover:border-primary hover:bg-primary hover:text-primary-foreground sm:text-xl"
                   >
                     <span className="mr-2 font-pixel text-[10px] text-primary group-hover:text-primary-foreground">▶</span>
                     {c.text}
@@ -585,17 +589,17 @@ function Play() {
             )}
 
             {isEnd && (
-              <div className="mt-4 flex flex-wrap gap-2">
+              <div className="mt-2 flex flex-wrap gap-2">
                 <button
                   onClick={(e) => { e.stopPropagation(); endDialogueExit(); }}
-                  className="bg-primary px-5 py-3 font-pixel text-xs text-primary-foreground hover:brightness-110"
+                  className="bg-primary px-4 py-2 font-pixel text-[10px] text-primary-foreground hover:brightness-110 sm:text-xs"
                 >
                   ✦ LANJUT
                 </button>
                 <Link
                   to="/dictionary"
                   onClick={(e) => e.stopPropagation()}
-                  className="border-2 border-primary bg-card px-5 py-3 font-pixel text-xs text-primary hover:bg-primary hover:text-primary-foreground"
+                  className="border-2 border-primary bg-card px-4 py-2 font-pixel text-[10px] text-primary hover:bg-primary hover:text-primary-foreground sm:text-xs"
                 >
                   📖 KAMUS
                 </Link>
@@ -603,7 +607,7 @@ function Play() {
             )}
 
             {!showChoices && !isEnd && (
-              <div className="mt-3 flex justify-end font-mono-pixel text-base text-muted-foreground">
+              <div className="mt-1 flex justify-end font-mono-pixel text-xs text-muted-foreground sm:text-sm">
                 <span className="animate-blink">
                   {isTyping ? "klik untuk skip" : "▼ klik / SPACE untuk lanjut"}
                 </span>

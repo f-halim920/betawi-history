@@ -1,5 +1,7 @@
 import { useEffect, useState, useCallback } from "react";
 import type { Scene } from "./game-data";
+import { supabase } from "./supabase";
+import type { AuthUser } from "./auth";
 
 const KEY_WORDS = "asalcomot:words";
 const KEY_PROGRESS = "asalcomot:progress";
@@ -30,20 +32,48 @@ export function useCollectedWords() {
     };
   }, []);
 
-  const collect = useCallback((id: string) => {
+  const collect = useCallback(async (id: string) => {
     const current = readSet(KEY_WORDS);
     if (current.has(id)) return;
     current.add(id);
-    localStorage.setItem(KEY_WORDS, JSON.stringify([...current]));
+    
+    const newWordsArr = [...current];
+
+    // Simpan ke localStorage untuk kecepatan UI
+    localStorage.setItem(KEY_WORDS, JSON.stringify(newWordsArr));
     window.dispatchEvent(new Event("words-updated"));
+
+    // Sync ke Supabase di background
+    try {
+      const rawUser = localStorage.getItem("asalcomot:auth");
+      if (rawUser) {
+        const user = JSON.parse(rawUser) as AuthUser;
+        if (user && user.nis) {
+          await supabase.from("progress").update({ words: newWordsArr }).eq("nis", user.nis);
+        }
+      }
+    } catch (err) {
+      console.error("Gagal sinkronisasi kamus ke Supabase", err);
+    }
   }, []);
 
-  const reset = useCallback(() => {
+  const reset = useCallback(async () => {
     localStorage.removeItem(KEY_WORDS);
     localStorage.removeItem(KEY_PROGRESS);
     localStorage.removeItem(KEY_SCENE);
     localStorage.removeItem(KEY_INTRO);
     window.dispatchEvent(new Event("words-updated"));
+
+    // Hapus juga di Supabase jika sedang login
+    try {
+      const rawUser = localStorage.getItem("asalcomot:auth");
+      if (rawUser) {
+        const user = JSON.parse(rawUser) as AuthUser;
+        if (user && user.nis) {
+          await supabase.from("progress").update({ words: [], scenes: [] }).eq("nis", user.nis);
+        }
+      }
+    } catch {}
   }, []);
 
   return { words, collect, reset };
