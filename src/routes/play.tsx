@@ -236,6 +236,16 @@ function Play() {
     }
   }, [activeNpc, completedNpcs, sceneNpcs, clear, fadeTo, navigate, setScene]);
 
+  const cancelDialogue = useCallback(() => {
+    fadeTo(() => {
+      setMode("explore");
+      setActiveNpc(null);
+      setLineIndex(0);
+      setCurrentId("");
+      clear();
+    });
+  }, [fadeTo, clear]);
+
   const advance = useCallback(() => {
     if (mode !== "dialogue" || !node) return;
     if (isTyping) {
@@ -299,6 +309,9 @@ function Play() {
         if (e.code === "Space" || e.code === "Enter") {
           e.preventDefault();
           advance();
+        } else if (e.key === "Escape") {
+          e.preventDefault();
+          cancelDialogue();
         }
       }
     };
@@ -309,7 +322,7 @@ function Play() {
       window.removeEventListener("keydown", onDown);
       window.removeEventListener("keyup", onUp);
     };
-  }, [advance, mode, nearestNpc, startDialogue]);
+  }, [advance, mode, nearestNpc, startDialogue, cancelDialogue]);
 
   const press = (k: string, down: boolean) => {
     if (down) keysRef.current.add(k);
@@ -563,6 +576,13 @@ function Play() {
                 {speakerName}
               </div>
             )}
+            
+            <button
+              onClick={(e) => { e.stopPropagation(); cancelDialogue(); }}
+              className="absolute -top-6 right-4 border-4 border-primary bg-card px-2 py-1 font-pixel text-[8px] text-destructive hover:bg-destructive hover:text-destructive-foreground sm:text-[10px]"
+            >
+              🚪 KELUAR
+            </button>
             <p className="min-h-[2.5rem] font-mono-pixel text-lg leading-relaxed text-foreground sm:text-xl">
               {line.speaker === "narrator" ? <em>{typed}</em> : typed}
               {isTyping && <span className="ml-1 animate-blink text-primary">▊</span>}
