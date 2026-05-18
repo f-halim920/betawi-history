@@ -32,6 +32,16 @@ function Landing() {
 
   return (
     <div className="relative bg-background text-foreground">
+      {user && (
+        <div className="absolute right-4 top-4 z-50">
+          <button
+            onClick={logout}
+            className="border-2 border-primary bg-card/80 px-3 py-2 font-pixel text-[10px] text-primary transition hover:border-destructive hover:bg-destructive hover:text-destructive-foreground"
+          >
+            LOGOUT
+          </button>
+        </div>
+      )}
       <section
         id="home"
         className="relative flex min-h-screen items-center justify-center overflow-hidden px-4 py-16"
@@ -86,16 +96,6 @@ function Landing() {
               </p>
             </button>
           </div>
-
-          {user && (
-            <button
-              onClick={logout}
-              className="mt-8 font-mono-pixel text-sm text-muted-foreground underline-offset-4 hover:text-destructive hover:underline"
-            >
-              Logout
-            </button>
-          )}
-
           <p className="mt-8 font-mono-pixel text-sm text-muted-foreground">
             {ready ? null : "memuat..."}
           </p>
