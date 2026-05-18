@@ -1,7 +1,10 @@
 import { useEffect, useState, useCallback } from "react";
+import type { Scene } from "./game-data";
 
-const KEY_WORDS = "betawi-game:collected-words";
-const KEY_PROGRESS = "betawi-game:progress";
+const KEY_WORDS = "asalcomot:words";
+const KEY_PROGRESS = "asalcomot:progress";
+const KEY_SCENE = "asalcomot:scene";
+const KEY_INTRO = "asalcomot:intro-seen";
 
 function readSet(key: string): Set<string> {
   if (typeof window === "undefined") return new Set();
@@ -11,11 +14,6 @@ function readSet(key: string): Set<string> {
   } catch {
     return new Set();
   }
-}
-
-function readString(key: string): string | null {
-  if (typeof window === "undefined") return null;
-  return localStorage.getItem(key);
 }
 
 export function useCollectedWords() {
@@ -34,6 +32,7 @@ export function useCollectedWords() {
 
   const collect = useCallback((id: string) => {
     const current = readSet(KEY_WORDS);
+    if (current.has(id)) return;
     current.add(id);
     localStorage.setItem(KEY_WORDS, JSON.stringify([...current]));
     window.dispatchEvent(new Event("words-updated"));
@@ -42,6 +41,8 @@ export function useCollectedWords() {
   const reset = useCallback(() => {
     localStorage.removeItem(KEY_WORDS);
     localStorage.removeItem(KEY_PROGRESS);
+    localStorage.removeItem(KEY_SCENE);
+    localStorage.removeItem(KEY_INTRO);
     window.dispatchEvent(new Event("words-updated"));
   }, []);
 
@@ -52,7 +53,7 @@ export function useProgress() {
   const [nodeId, setNodeId] = useState<string | null>(null);
 
   useEffect(() => {
-    setNodeId(readString(KEY_PROGRESS));
+    setNodeId(typeof window === "undefined" ? null : localStorage.getItem(KEY_PROGRESS));
   }, []);
 
   const save = useCallback((id: string) => {
@@ -66,4 +67,30 @@ export function useProgress() {
   }, []);
 
   return { nodeId, save, clear };
+}
+
+export function useScene() {
+  const [scene, setSceneState] = useState<Scene | null>(null);
+  useEffect(() => {
+    const s = typeof window === "undefined" ? null : (localStorage.getItem(KEY_SCENE) as Scene | null);
+    setSceneState(s);
+  }, []);
+  const setScene = useCallback((s: Scene | null) => {
+    if (s) localStorage.setItem(KEY_SCENE, s);
+    else localStorage.removeItem(KEY_SCENE);
+    setSceneState(s);
+  }, []);
+  return { scene, setScene };
+}
+
+export function useIntroSeen() {
+  const [seen, setSeen] = useState(false);
+  useEffect(() => {
+    setSeen(typeof window !== "undefined" && localStorage.getItem(KEY_INTRO) === "1");
+  }, []);
+  const markSeen = useCallback(() => {
+    localStorage.setItem(KEY_INTRO, "1");
+    setSeen(true);
+  }, []);
+  return { seen, markSeen };
 }
