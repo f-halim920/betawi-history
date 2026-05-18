@@ -460,7 +460,7 @@ function Play() {
             >
               {/* Dialog Popup */}
               {isNear && mode === "explore" && (
-                <div className="mb-2 animate-float-up">
+                <div className="mb-12 animate-float-up sm:mb-6">
                   <button
                     onClick={() => startDialogue(npc)}
                     className="pointer-events-auto border-4 border-gold bg-card/95 px-3 py-2 font-pixel text-[10px] text-gold shadow-2xl whitespace-nowrap"
@@ -533,7 +533,7 @@ function Play() {
           </div>
           
           {/* Mobile Controller Pad */}
-          <div className="absolute bottom-8 left-4 z-20 flex gap-2 opacity-80 touch-none sm:hidden select-none">
+          <div className="absolute bottom-8 left-1/2 z-20 flex -translate-x-1/2 gap-6 opacity-80 touch-none select-none sm:hidden">
             <button
               onPointerDown={(e) => { e.currentTarget.setPointerCapture(e.pointerId); press("ArrowLeft", true); }}
               onPointerUp={(e) => { e.currentTarget.releasePointerCapture(e.pointerId); press("ArrowLeft", false); }}
