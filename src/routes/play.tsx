@@ -453,13 +453,35 @@ function Play() {
           const isNear = nearestNpc?.id === npc.id;
           const done = completedNpcs.has(npc.id);
           return (
-            <div key={npc.id}>
+            <div
+              key={npc.id}
+              className="absolute -translate-x-1/2 flex flex-col items-center justify-end"
+              style={{ left: `${npc.x}%`, bottom: GROUND_BOTTOM }}
+            >
+              {/* Dialog Popup */}
+              {isNear && mode === "explore" && (
+                <div className="mb-2 animate-float-up">
+                  <button
+                    onClick={() => startDialogue(npc)}
+                    className="pointer-events-auto border-4 border-gold bg-card/95 px-3 py-2 font-pixel text-[10px] text-gold shadow-2xl whitespace-nowrap"
+                  >
+                    ▼ <span className="hidden sm:inline">Tekan E</span><span className="sm:inline">TAP</span> — Ngobrol sama {npc.name}
+                  </button>
+                </div>
+              )}
+
+              {/* Name tag */}
+              {!isNear && mode === "explore" && (
+                <div className={`mb-2 border-2 ${done ? "border-gold/60 bg-card/60" : "border-primary bg-card/90"} px-2 py-1 font-pixel text-[8px] ${done ? "text-gold/60 line-through" : "text-primary"}`}>
+                  {npc.name} {done ? "✓" : ""}
+                </div>
+              )}
+
               <img
                 src={NPC_SPRITES[npc.id]}
                 alt={npc.name}
                 loading="lazy"
-                style={{ left: `${npc.x}%`, bottom: GROUND_BOTTOM }}
-                className={`pixel absolute ${SPRITE_HEIGHT} -translate-x-1/2 transition-all duration-300 ${
+                className={`pixel pointer-events-auto ${SPRITE_HEIGHT} transition-all duration-300 ${
                   isSpeaking
                     ? "scale-105 brightness-110"
                     : mode !== "explore" && !isActive
@@ -468,18 +490,10 @@ function Play() {
                     ? "brightness-110 drop-shadow-[0_0_12px_rgba(255,200,80,0.7)]"
                     : "brightness-95"
                 }`}
+                onClick={() => {
+                  if (mode === "explore" && isNear) startDialogue(npc);
+                }}
               />
-              {/* Name tag */}
-              {mode === "explore" && (
-                <div
-                  style={{ left: `${npc.x}%`, bottom: `calc(${GROUND_BOTTOM} + 30vh)` }}
-                  className="absolute -translate-x-1/2"
-                >
-                  <div className={`border-2 ${done ? "border-gold/60 bg-card/60" : "border-primary bg-card/90"} px-2 py-1 font-pixel text-[8px] ${done ? "text-gold/60 line-through" : "text-primary"}`}>
-                    {npc.name} {done ? "✓" : ""}
-                  </div>
-                </div>
-              )}
             </div>
           );
         })}
@@ -496,20 +510,6 @@ function Play() {
             mode === "dialogue" && line?.speaker === "mc" ? "brightness-110" : mode !== "explore" ? "brightness-90" : "brightness-105"
           }`}
         />
-
-        {nearestNpc && mode === "explore" && (
-          <div
-            style={{ left: `${nearestNpc.x}%`, bottom: `calc(${GROUND_BOTTOM} + 28vh)` }}
-            className="absolute -translate-x-1/2 animate-float-up"
-          >
-            <button
-              onClick={() => startDialogue(nearestNpc)}
-              className="pointer-events-auto border-4 border-gold bg-card/95 px-4 py-2 font-pixel text-[10px] text-gold shadow-2xl"
-            >
-              ▼ Tekan E — Ngobrol sama {nearestNpc.name}
-            </button>
-          </div>
-        )}
       </div>
 
       {/* Word popup */}
@@ -531,31 +531,26 @@ function Play() {
               ← → / A D untuk jalan · E / klik karakter untuk ngobrol
             </div>
           </div>
-          <div className="absolute bottom-6 left-4 z-20 flex gap-2 sm:hidden">
+          
+          {/* Mobile Controller Pad */}
+          <div className="absolute bottom-8 left-4 z-20 flex gap-2 opacity-80 touch-none sm:hidden select-none">
             <button
-              onPointerDown={() => press("ArrowLeft", true)}
-              onPointerUp={() => press("ArrowLeft", false)}
-              onPointerLeave={() => press("ArrowLeft", false)}
-              className="h-14 w-14 border-4 border-primary bg-card/90 font-pixel text-lg text-primary active:bg-primary active:text-primary-foreground"
+              onPointerDown={(e) => { e.currentTarget.setPointerCapture(e.pointerId); press("ArrowLeft", true); }}
+              onPointerUp={(e) => { e.currentTarget.releasePointerCapture(e.pointerId); press("ArrowLeft", false); }}
+              onPointerCancel={() => press("ArrowLeft", false)}
+              className="flex h-16 w-20 items-center justify-center border-4 border-primary bg-card/90 font-pixel text-2xl text-primary active:bg-primary active:text-primary-foreground"
             >
-              ←
+              ◀
             </button>
             <button
-              onPointerDown={() => press("ArrowRight", true)}
-              onPointerUp={() => press("ArrowRight", false)}
-              onPointerLeave={() => press("ArrowRight", false)}
-              className="h-14 w-14 border-4 border-primary bg-card/90 font-pixel text-lg text-primary active:bg-primary active:text-primary-foreground"
+              onPointerDown={(e) => { e.currentTarget.setPointerCapture(e.pointerId); press("ArrowRight", true); }}
+              onPointerUp={(e) => { e.currentTarget.releasePointerCapture(e.pointerId); press("ArrowRight", false); }}
+              onPointerCancel={() => press("ArrowRight", false)}
+              className="flex h-16 w-20 items-center justify-center border-4 border-primary bg-card/90 font-pixel text-2xl text-primary active:bg-primary active:text-primary-foreground"
             >
-              →
+              ▶
             </button>
           </div>
-          <button
-            onClick={() => startDialogue(nearestNpc)}
-            disabled={!nearestNpc}
-            className="absolute bottom-6 right-4 z-20 h-14 w-20 border-4 border-gold bg-card/90 font-pixel text-[10px] text-gold disabled:opacity-30 active:bg-gold active:text-card sm:hidden"
-          >
-            E
-          </button>
         </>
       )}
 
