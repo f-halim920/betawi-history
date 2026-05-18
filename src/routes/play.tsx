@@ -64,7 +64,7 @@ const INTERACT_DISTANCE = 10;
 const MIN_X = 4;
 const MAX_X = 96;
 const GROUND_BOTTOM = "5%";
-const SPRITE_HEIGHT = "h-[32vh] max-h-[300px]";
+const SPRITE_HEIGHT = "h-[22vh] sm:h-[32vh] max-h-[300px]";
 
 type Mode = "intro" | "scene-select" | "explore" | "dialogue" | "quiz" | "transition";
 
@@ -433,7 +433,7 @@ function Play() {
         >
           ← TEMPAT
         </button>
-        <p className="font-pixel text-[10px] text-primary text-shadow-pixel sm:text-xs">
+        <p className="hidden font-pixel text-[10px] text-primary text-shadow-pixel sm:block sm:text-xs">
           {scene ? SCENE_LABEL[scene] : ""}  · {completedNpcs.size}/{sceneNpcs.length} selesai
         </p>
         <Link
@@ -499,7 +499,7 @@ function Play() {
 
         {nearestNpc && mode === "explore" && (
           <div
-            style={{ left: `${nearestNpc.x}%`, bottom: `calc(${GROUND_BOTTOM} + 36vh)` }}
+            style={{ left: `${nearestNpc.x}%`, bottom: `calc(${GROUND_BOTTOM} + 28vh)` }}
             className="absolute -translate-x-1/2 animate-float-up"
           >
             <button
@@ -526,12 +526,12 @@ function Play() {
       {/* Explore HUD */}
       {mode === "explore" && (
         <>
-          <div className="pointer-events-none absolute bottom-4 left-1/2 z-20 -translate-x-1/2">
-            <div className="border-2 border-primary bg-card/90 px-3 py-1.5 font-mono-pixel text-sm text-foreground shadow-xl whitespace-nowrap sm:text-base">
+          <div className="pointer-events-none absolute bottom-4 left-1/2 z-20 hidden -translate-x-1/2 sm:block">
+            <div className="whitespace-nowrap border-2 border-primary bg-card/90 px-3 py-1.5 font-mono-pixel text-sm text-foreground shadow-xl sm:text-base">
               ← → / A D untuk jalan · E / klik karakter untuk ngobrol
             </div>
           </div>
-          <div className="absolute bottom-20 left-4 z-20 flex gap-2 sm:hidden">
+          <div className="absolute bottom-6 left-4 z-20 flex gap-2 sm:hidden">
             <button
               onPointerDown={() => press("ArrowLeft", true)}
               onPointerUp={() => press("ArrowLeft", false)}
@@ -552,7 +552,7 @@ function Play() {
           <button
             onClick={() => startDialogue(nearestNpc)}
             disabled={!nearestNpc}
-            className="absolute bottom-20 right-4 z-20 h-14 w-20 border-4 border-gold bg-card/90 font-pixel text-[10px] text-gold disabled:opacity-30 active:bg-gold active:text-card sm:hidden"
+            className="absolute bottom-6 right-4 z-20 h-14 w-20 border-4 border-gold bg-card/90 font-pixel text-[10px] text-gold disabled:opacity-30 active:bg-gold active:text-card sm:hidden"
           >
             E
           </button>
