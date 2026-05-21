@@ -494,21 +494,17 @@ function Play() {
               className={`absolute -translate-x-1/2 flex flex-col items-center justify-end ${SPRITE_HEIGHT}`}
               style={{ left: `${npc.x}%`, bottom: GROUND_BOTTOM }}
             >
-              {/* Dialog Popup */}
-              {isNear && mode === "explore" && (
-                <div className="mb-1 animate-float-up sm:mb-6">
-                  <button
-                    onClick={() => startDialogue(npc)}
-                    className="pointer-events-auto border-4 border-gold bg-card/95 px-3 py-2 font-pixel text-[10px] text-gold shadow-2xl whitespace-nowrap"
-                  >
-                    ▼ <span className="hidden sm:inline">Tekan E</span><span className="inline sm:hidden">TAP</span> — Ngobrol sama {npc.name}
-                  </button>
-                </div>
-              )}
-
               {/* Name tag */}
-              {!isNear && mode === "explore" && (
-                <div className={`mb-2 border-2 ${done ? "border-gold/60 bg-card/60" : "border-primary bg-card/90"} px-2 py-1 font-pixel text-[8px] ${done ? "text-gold/60 line-through" : "text-primary"}`}>
+              {mode === "explore" && (
+                <div
+                  className={`mb-2 border-2 px-2 py-1 font-pixel text-[8px] transition-all duration-300 ${
+                    isNear
+                      ? "border-gold bg-card text-gold scale-110 shadow-[0_0_8px_rgba(255,200,80,0.5)]"
+                      : done
+                      ? "border-gold/60 bg-card/60 text-gold/60 line-through"
+                      : "border-primary bg-card/90 text-primary"
+                  }`}
+                >
                   {npc.name} {done ? "✓" : ""}
                 </div>
               )}
@@ -559,17 +555,22 @@ function Play() {
         </div>
       )}
 
-      {/* Explore HUD */}
+      {/* Explore HUD / Interaction Prompt */}
       {mode === "explore" && (
-        <>
-          <div className="pointer-events-none absolute bottom-4 left-1/2 z-20 hidden -translate-x-1/2 sm:block">
-            <div className="whitespace-nowrap border-2 border-primary bg-card/90 px-3 py-1.5 font-mono-pixel text-sm text-foreground shadow-xl sm:text-base">
+        <div className="absolute bottom-4 left-1/2 z-20 -translate-x-1/2">
+          {nearestNpc ? (
+            <button
+              onClick={() => startDialogue(nearestNpc)}
+              className="pointer-events-auto whitespace-nowrap border-4 border-gold bg-card/95 px-4 py-2 font-pixel text-[9px] sm:text-xs text-gold shadow-2xl hover:bg-gold hover:text-card active:scale-95 transition-all duration-150 animate-float-up"
+            >
+              ▼ <span className="hidden sm:inline">Tekan E / Klik</span><span className="inline sm:hidden">TAP</span> — Ngobrol sama {nearestNpc.name}
+            </button>
+          ) : (
+            <div className="hidden sm:block pointer-events-none whitespace-nowrap border-2 border-primary bg-card/90 px-3 py-1.5 font-mono-pixel text-sm text-foreground shadow-xl sm:text-base">
               ← → / A D untuk jalan · E / klik karakter untuk ngobrol
             </div>
-          </div>
-          
-
-        </>
+          )}
+        </div>
       )}
 
       {/* Dialogue box */}
