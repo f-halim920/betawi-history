@@ -189,16 +189,17 @@ function Play() {
 
   // Collect word
   useEffect(() => {
-    if (mode === "explore" || mode === "scene-select") {
+    if (mode !== "dialogue") {
       setPopupWord(null);
       return;
     }
-    if (mode !== "dialogue") return;
     if (line?.word) {
       collect(line.word.id);
       setPopupWord(line.word);
-      const t = setTimeout(() => setPopupWord(null), 2800);
+      const t = setTimeout(() => setPopupWord(null), 3000);
       return () => clearTimeout(t);
+    } else {
+      setPopupWord(null);
     }
   }, [line, collect, mode]);
 
@@ -549,7 +550,7 @@ function Play() {
 
       {/* Word popup */}
       {popupWord && (
-        <div className="pointer-events-none absolute left-1/2 top-20 z-40 -translate-x-1/2 animate-float-up">
+        <div className="pointer-events-none absolute left-1/2 top-12 sm:top-20 z-40 -translate-x-1/2 animate-float-up">
           <div className="border-4 border-gold bg-card/95 px-6 py-3 text-center shadow-2xl">
             <p className="font-pixel text-[10px] uppercase text-gold">✦ Kata Baru Terbuka</p>
             <p className="mt-2 font-pixel text-lg text-primary">{popupWord.original}</p>
