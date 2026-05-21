@@ -446,7 +446,7 @@ function Play() {
   const isEnd = mode === "dialogue" && !isTyping && node?.end && lineIndex === (node.lines?.length ?? 0) - 1;
 
   return (
-    <div className="flex h-screen w-screen items-center justify-center bg-zinc-950 overflow-hidden select-none">
+    <div className="flex h-screen w-screen flex-col items-center justify-center bg-zinc-950 overflow-hidden select-none">
       <div
         className="relative overflow-hidden bg-background text-foreground shadow-2xl border-4 border-primary/20 rounded-md animate-fade-in"
         style={{
@@ -495,7 +495,7 @@ function Play() {
             >
               {/* Dialog Popup */}
               {isNear && mode === "explore" && (
-                <div className="mb-12 animate-float-up sm:mb-6">
+                <div className="mb-1 animate-float-up sm:mb-6">
                   <button
                     onClick={() => startDialogue(npc)}
                     className="pointer-events-auto border-4 border-gold bg-card/95 px-3 py-2 font-pixel text-[10px] text-gold shadow-2xl whitespace-nowrap"
@@ -567,58 +567,40 @@ function Play() {
             </div>
           </div>
           
-          {/* Mobile Controller Pad */}
-          <div className="absolute bottom-8 left-1/2 z-20 flex -translate-x-1/2 gap-6 opacity-80 touch-none select-none sm:hidden">
-            <button
-              onPointerDown={(e) => { e.currentTarget.setPointerCapture(e.pointerId); press("ArrowLeft", true); }}
-              onPointerUp={(e) => { e.currentTarget.releasePointerCapture(e.pointerId); press("ArrowLeft", false); }}
-              onPointerCancel={() => press("ArrowLeft", false)}
-              className="flex h-16 w-20 items-center justify-center border-4 border-primary bg-card/90 font-pixel text-2xl text-primary active:bg-primary active:text-primary-foreground"
-            >
-              ◀
-            </button>
-            <button
-              onPointerDown={(e) => { e.currentTarget.setPointerCapture(e.pointerId); press("ArrowRight", true); }}
-              onPointerUp={(e) => { e.currentTarget.releasePointerCapture(e.pointerId); press("ArrowRight", false); }}
-              onPointerCancel={() => press("ArrowRight", false)}
-              className="flex h-16 w-20 items-center justify-center border-4 border-primary bg-card/90 font-pixel text-2xl text-primary active:bg-primary active:text-primary-foreground"
-            >
-              ▶
-            </button>
-          </div>
+
         </>
       )}
 
       {/* Dialogue box */}
       {mode === "dialogue" && node && line && (
-        <div className="absolute bottom-1.5 left-0 right-0 z-20 px-2 sm:px-4">
-          <div className="relative mx-auto max-w-3xl border-4 border-primary bg-card/95 px-3 py-1.5 shadow-2xl backdrop-blur sm:px-4 sm:py-2">
+        <div className="absolute bottom-1 left-0 right-0 z-20 px-1.5 sm:px-4">
+          <div className="relative mx-auto max-w-3xl border-2 border-primary bg-card/95 px-2 py-0.5 shadow-2xl backdrop-blur sm:border-4 sm:px-4 sm:py-2">
             {speakerName && (
-              <div className={`absolute -top-5 left-4 border-4 border-primary bg-card px-2 py-0.5 font-pixel text-[8px] sm:text-[10px] ${speakerColor}`}>
+              <div className={`absolute -top-4 left-3 border-2 border-primary bg-card px-1.5 py-0 font-pixel text-[7px] sm:-top-5 sm:left-4 sm:border-4 sm:px-2 sm:py-0.5 sm:text-[10px] ${speakerColor}`}>
                 {speakerName}
               </div>
             )}
             
             <button
               onClick={(e) => { e.stopPropagation(); cancelDialogue(); }}
-              className="absolute -top-5 right-4 border-4 border-primary bg-card px-2 py-0.5 font-pixel text-[8px] text-destructive hover:bg-destructive hover:text-destructive-foreground sm:text-[9px]"
+              className="absolute -top-4 right-3 border-2 border-primary bg-card px-1.5 py-0 font-pixel text-[7px] text-destructive hover:bg-destructive hover:text-destructive-foreground sm:-top-5 sm:right-4 sm:border-4 sm:px-2 sm:py-0.5 sm:text-[9px]"
             >
               🚪 KELUAR
             </button>
-            <p className="min-h-[2rem] font-mono-pixel text-base leading-normal text-foreground sm:text-lg">
+            <p className="min-h-[1.1rem] font-mono-pixel text-[11px] leading-snug text-foreground sm:min-h-[2rem] sm:text-lg">
               {line.speaker === "narrator" ? <em>{typed}</em> : typed}
               {isTyping && <span className="ml-1 animate-blink text-primary">▊</span>}
             </p>
 
             {showChoices && (
-              <div className="mt-2 flex flex-col gap-1.5">
+              <div className="mt-1 flex flex-col gap-1 sm:mt-2 sm:gap-1.5">
                 {node.choices!.map((c, i) => (
                   <button
                     key={i}
                     onClick={(e) => { e.stopPropagation(); choose(c.nextId); }}
-                    className="group border-2 border-border bg-background/60 px-2.5 py-1.5 text-left font-mono-pixel text-base text-foreground hover:border-primary hover:bg-primary hover:text-primary-foreground sm:text-lg"
+                    className="group border-2 border-border bg-background/60 px-1.5 py-1 text-left font-mono-pixel text-[11px] text-foreground hover:border-primary hover:bg-primary hover:text-primary-foreground sm:px-2.5 sm:py-1.5 sm:text-lg"
                   >
-                    <span className="mr-2 font-pixel text-[9px] text-primary group-hover:text-primary-foreground">▶</span>
+                    <span className="mr-1.5 font-pixel text-[8px] text-primary group-hover:text-primary-foreground sm:mr-2 sm:text-[9px]">▶</span>
                     {c.text}
                   </button>
                 ))}
@@ -644,9 +626,9 @@ function Play() {
             )}
 
             {!showChoices && !isEnd && (
-              <div className="mt-1 flex justify-end font-mono-pixel text-xs text-muted-foreground sm:text-sm">
+              <div className="mt-0.5 flex justify-end font-mono-pixel text-[9px] text-muted-foreground sm:mt-1 sm:text-sm">
                 <span className="animate-blink">
-                  {isTyping ? "klik untuk skip" : "▼ klik / SPACE untuk lanjut"}
+                  {isTyping ? "tap skip" : "▼ tap / SPACE lanjut"}
                 </span>
               </div>
             )}
@@ -657,31 +639,55 @@ function Play() {
       {/* QUIZ overlay */}
       {mode === "quiz" && node?.quiz && (
         <div className="absolute inset-0 z-30 flex items-end justify-center bg-background/40 backdrop-blur-sm sm:items-center">
-          <div className="m-3 w-full max-w-2xl border-4 border-gold bg-card/95 p-6 shadow-2xl animate-float-up">
-            <p className="font-pixel text-[10px] uppercase tracking-widest text-gold">✦ QUIZ KOSAKATA</p>
-            <h3 className="mt-3 font-pixel text-lg text-primary sm:text-xl">{node.quiz.question}</h3>
-            <div className="mt-5 flex flex-col gap-2">
+          <div className="m-1.5 w-full max-w-2xl border-2 border-gold bg-card/95 p-2 shadow-2xl animate-float-up sm:m-3 sm:border-4 sm:p-6">
+            <p className="font-pixel text-[7px] uppercase tracking-widest text-gold sm:text-[10px]">✦ QUIZ KOSAKATA</p>
+            <h3 className="mt-1 font-pixel text-[11px] text-primary sm:mt-3 sm:text-xl">{node.quiz.question}</h3>
+            <div className="mt-2 flex flex-col gap-1 sm:mt-5 sm:gap-2">
               {node.quiz.options.map((opt, i) => (
                 <button
                   key={i}
                   onClick={() => answerQuiz(opt)}
-                  className="group border-2 border-border bg-background/60 px-4 py-3 text-left font-mono-pixel text-xl text-foreground hover:border-primary hover:bg-primary hover:text-primary-foreground"
+                  className="group border-2 border-border bg-background/60 px-2 py-1.5 text-left font-mono-pixel text-[11px] text-foreground hover:border-primary hover:bg-primary hover:text-primary-foreground sm:px-4 sm:py-3 sm:text-xl"
                 >
-                  <span className="mr-2 font-pixel text-[10px] text-gold group-hover:text-primary-foreground">
+                  <span className="mr-1.5 font-pixel text-[8px] text-gold group-hover:text-primary-foreground sm:mr-2 sm:text-[10px]">
                     {String.fromCharCode(65 + i)}.
                   </span>
                   {opt.text}
                 </button>
               ))}
             </div>
-            <p className="mt-4 font-mono-pixel text-base text-muted-foreground">
-              💡 Tidak masalah salah — Chaer tetap belajar dari penjelasan karakter.
+            <p className="mt-1.5 font-mono-pixel text-[9px] text-muted-foreground sm:mt-4 sm:text-base">
+              💡 Tidak masalah salah — Chaer tetap belajar.
             </p>
           </div>
         </div>
       )}
 
         <FadeOverlay active={fade} />
+      </div>
+
+      {/* Mobile D-pad — di luar frame agar tidak menutupi karakter */}
+      <div
+        className={`flex gap-4 sm:hidden mt-2 touch-none select-none transition-opacity duration-200 ${
+          mode !== "explore" ? "invisible pointer-events-none" : "opacity-90"
+        }`}
+      >
+        <button
+          onPointerDown={(e) => { e.preventDefault(); e.currentTarget.setPointerCapture(e.pointerId); press("ArrowLeft", true); }}
+          onPointerUp={(e) => { e.currentTarget.releasePointerCapture(e.pointerId); press("ArrowLeft", false); }}
+          onPointerCancel={() => press("ArrowLeft", false)}
+          className="flex h-14 w-20 items-center justify-center border-4 border-primary bg-card/90 font-pixel text-2xl text-primary active:bg-primary active:text-primary-foreground"
+        >
+          ◀
+        </button>
+        <button
+          onPointerDown={(e) => { e.preventDefault(); e.currentTarget.setPointerCapture(e.pointerId); press("ArrowRight", true); }}
+          onPointerUp={(e) => { e.currentTarget.releasePointerCapture(e.pointerId); press("ArrowRight", false); }}
+          onPointerCancel={() => press("ArrowRight", false)}
+          className="flex h-14 w-20 items-center justify-center border-4 border-primary bg-card/90 font-pixel text-2xl text-primary active:bg-primary active:text-primary-foreground"
+        >
+          ▶
+        </button>
       </div>
     </div>
   );
