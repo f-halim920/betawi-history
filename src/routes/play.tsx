@@ -22,6 +22,8 @@ import { useAuth } from "@/lib/auth";
 import scenePasar from "@/assets/scene-pasar.jpg";
 import scenePelabuhan from "@/assets/scene-pelabuhan.jpg";
 import mcImg from "@/assets/char-mc.png";
+import mcLeftImg from "@/assets/char-mc-left.png";
+import mcRightImg from "@/assets/char-mc-right.png";
 import jafarImg from "@/assets/char-jafar.png";
 import fengImg from "@/assets/char-feng.png";
 import karsaImg from "@/assets/char-karsa.png";
@@ -64,7 +66,7 @@ const INTERACT_DISTANCE = 10;
 const MIN_X = 4;
 const MAX_X = 96;
 const GROUND_BOTTOM = "5%";
-const SPRITE_HEIGHT = "h-[22vh] sm:h-[32vh] max-h-[300px]";
+const SPRITE_HEIGHT = "h-[40%] sm:h-[46%] max-h-[200px]";
 
 type Mode = "intro" | "scene-select" | "explore" | "dialogue" | "quiz" | "transition";
 
@@ -111,6 +113,19 @@ function Play() {
 
   const node: DialogueNode | undefined = DIALOGUE[currentId];
   const line = node?.lines?.[lineIndex];
+
+  const currentMcImg = useMemo(() => {
+    if (mode === "dialogue" && activeNpc) {
+      const npc = NPC_BY_ID[activeNpc];
+      if (npc) {
+        return mcX < npc.x ? mcRightImg : mcLeftImg;
+      }
+    }
+    if (walking) {
+      return facing === "left" ? mcLeftImg : mcRightImg;
+    }
+    return mcImg; // front view when idle
+  }, [mode, activeNpc, walking, facing, mcX]);
 
   // Persist
   useEffect(() => {
@@ -431,12 +446,18 @@ function Play() {
   const isEnd = mode === "dialogue" && !isTyping && node?.end && lineIndex === (node.lines?.length ?? 0) - 1;
 
   return (
-    <div
-      className="relative h-screen w-screen overflow-hidden bg-background text-foreground"
-      onClick={mode === "dialogue" ? advance : undefined}
-    >
-      <img src={bg} alt="" className="pixel absolute inset-0 h-full w-full object-cover" />
-      <div className="absolute inset-0 vignette" />
+    <div className="flex h-screen w-screen items-center justify-center bg-zinc-950 overflow-hidden select-none">
+      <div
+        className="relative overflow-hidden bg-background text-foreground shadow-2xl border-4 border-primary/20 rounded-md animate-fade-in"
+        style={{
+          width: "min(100vw, 133.33vh)",
+          height: "min(100vh, 75vw)",
+          aspectRatio: "4/3",
+        }}
+        onClick={mode === "dialogue" ? advance : undefined}
+      >
+        <img src={bg} alt="" className="pixel absolute inset-0 h-full w-full object-cover" />
+        <div className="absolute inset-0 vignette" />
 
       {/* Top bar */}
       <div className="absolute left-0 right-0 top-0 z-30 flex items-center justify-between gap-2 p-3 sm:p-4">
@@ -461,6 +482,7 @@ function Play() {
       {/* World */}
       <div className="pointer-events-none absolute inset-0 z-10">
         {sceneNpcs.map((npc) => {
+          if (activeNpc && activeNpc !== npc.id) return null;
           const isSpeaking = mode === "dialogue" && activeNpc === npc.id && line?.speaker === npc.id;
           const isActive = activeNpc === npc.id;
           const isNear = nearestNpc?.id === npc.id;
@@ -468,7 +490,7 @@ function Play() {
           return (
             <div
               key={npc.id}
-              className="absolute -translate-x-1/2 flex flex-col items-center justify-end"
+              className={`absolute -translate-x-1/2 flex flex-col items-center justify-end ${SPRITE_HEIGHT}`}
               style={{ left: `${npc.x}%`, bottom: GROUND_BOTTOM }}
             >
               {/* Dialog Popup */}
@@ -478,7 +500,7 @@ function Play() {
                     onClick={() => startDialogue(npc)}
                     className="pointer-events-auto border-4 border-gold bg-card/95 px-3 py-2 font-pixel text-[10px] text-gold shadow-2xl whitespace-nowrap"
                   >
-                    ▼ <span className="hidden sm:inline">Tekan E</span><span className="sm:inline">TAP</span> — Ngobrol sama {npc.name}
+                    ▼ <span className="hidden sm:inline">Tekan E</span><span className="inline sm:hidden">TAP</span> — Ngobrol sama {npc.name}
                   </button>
                 </div>
               )}
@@ -494,7 +516,7 @@ function Play() {
                 src={NPC_SPRITES[npc.id]}
                 alt={npc.name}
                 loading="lazy"
-                className={`pixel pointer-events-auto ${SPRITE_HEIGHT} transition-all duration-300 ${
+                className={`pixel pointer-events-auto h-full w-auto object-contain transition-all duration-300 ${
                   isSpeaking
                     ? "scale-105 brightness-110"
                     : mode !== "explore" && !isActive
@@ -512,12 +534,12 @@ function Play() {
         })}
 
         <img
-          src={mcImg}
+          src={currentMcImg}
           alt="Chaer"
           style={{
             left: `${mcX}%`,
             bottom: GROUND_BOTTOM,
-            transform: `translateX(-50%) scaleX(${facing === "right" ? 1 : -1}) translateY(${bobOffset}px)`,
+            transform: `translateX(-50%) translateY(${bobOffset}px)`,
           }}
           className={`pixel absolute ${SPRITE_HEIGHT} transition-[filter] duration-300 ${
             mode === "dialogue" && line?.speaker === "mc" ? "brightness-110" : mode !== "explore" ? "brightness-90" : "brightness-105"
@@ -569,34 +591,34 @@ function Play() {
 
       {/* Dialogue box */}
       {mode === "dialogue" && node && line && (
-        <div className="absolute bottom-2 left-0 right-0 z-20 px-2 sm:px-4">
-          <div className="relative mx-auto max-w-4xl border-4 border-primary bg-card/95 px-4 py-2 shadow-2xl backdrop-blur sm:px-5 sm:py-3">
+        <div className="absolute bottom-1.5 left-0 right-0 z-20 px-2 sm:px-4">
+          <div className="relative mx-auto max-w-3xl border-4 border-primary bg-card/95 px-3 py-1.5 shadow-2xl backdrop-blur sm:px-4 sm:py-2">
             {speakerName && (
-              <div className={`absolute -top-6 left-4 border-4 border-primary bg-card px-3 py-1 font-pixel text-[10px] sm:text-xs ${speakerColor}`}>
+              <div className={`absolute -top-5 left-4 border-4 border-primary bg-card px-2 py-0.5 font-pixel text-[8px] sm:text-[10px] ${speakerColor}`}>
                 {speakerName}
               </div>
             )}
             
             <button
               onClick={(e) => { e.stopPropagation(); cancelDialogue(); }}
-              className="absolute -top-6 right-4 border-4 border-primary bg-card px-2 py-1 font-pixel text-[8px] text-destructive hover:bg-destructive hover:text-destructive-foreground sm:text-[10px]"
+              className="absolute -top-5 right-4 border-4 border-primary bg-card px-2 py-0.5 font-pixel text-[8px] text-destructive hover:bg-destructive hover:text-destructive-foreground sm:text-[9px]"
             >
               🚪 KELUAR
             </button>
-            <p className="min-h-[2.5rem] font-mono-pixel text-lg leading-relaxed text-foreground sm:text-xl">
+            <p className="min-h-[2rem] font-mono-pixel text-base leading-normal text-foreground sm:text-lg">
               {line.speaker === "narrator" ? <em>{typed}</em> : typed}
               {isTyping && <span className="ml-1 animate-blink text-primary">▊</span>}
             </p>
 
             {showChoices && (
-              <div className="mt-2 flex flex-col gap-2">
+              <div className="mt-2 flex flex-col gap-1.5">
                 {node.choices!.map((c, i) => (
                   <button
                     key={i}
                     onClick={(e) => { e.stopPropagation(); choose(c.nextId); }}
-                    className="group border-2 border-border bg-background/60 px-3 py-2 text-left font-mono-pixel text-lg text-foreground hover:border-primary hover:bg-primary hover:text-primary-foreground sm:text-xl"
+                    className="group border-2 border-border bg-background/60 px-2.5 py-1.5 text-left font-mono-pixel text-base text-foreground hover:border-primary hover:bg-primary hover:text-primary-foreground sm:text-lg"
                   >
-                    <span className="mr-2 font-pixel text-[10px] text-primary group-hover:text-primary-foreground">▶</span>
+                    <span className="mr-2 font-pixel text-[9px] text-primary group-hover:text-primary-foreground">▶</span>
                     {c.text}
                   </button>
                 ))}
@@ -659,7 +681,8 @@ function Play() {
         </div>
       )}
 
-      <FadeOverlay active={fade} />
+        <FadeOverlay active={fade} />
+      </div>
     </div>
   );
 }
