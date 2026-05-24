@@ -231,7 +231,7 @@ const JAFAR: Record<string, DialogueNode> = {
   ...quizBlock(
     "q_gahwe", "jafar", "gahwe",
     "Apa arti “gahwe”?",
-    [{ text: "Kopi", correct: true }, { text: "Teh" }, { text: "Parfum" }],
+    [{ text: "Parfum" }, { text: "Teh" }, { text: "Kopi", correct: true }],
     "“Betul sekali! Kopi terbaik dari negeri ane. Kamu harus mencobanya.”",
     "“Ya ampun, kau melukai hati ane. Ini kopi — kopi terbaik harus dinikmati perlahan.”",
     "jafar_3",
@@ -268,7 +268,7 @@ const JAFAR: Record<string, DialogueNode> = {
   ...quizBlock(
     "q_tajir", "jafar", "tajir",
     "Apa arti “tajir”?",
-    [{ text: "Kaya", correct: true }, { text: "Pelit" }, { text: "Ramah" }],
+    [{ text: "Pelit" }, { text: "Kaya", correct: true }, { text: "Ramah" }],
     "“Iya! Dia kaya raya. Datang ke ane selalu beli parfum mahal-mahal.”",
     "“Justru sebaliknya. Kalau dia pelit, mana mungkin beli parfum semahal ini.”",
     "jafar_5",
@@ -285,7 +285,7 @@ const JAFAR: Record<string, DialogueNode> = {
   ...quizBlock(
     "q_wassalam", "jafar", "wassalam",
     "Apa arti “wassalam”?",
-    [{ text: "Salam penutup / beserta salam", correct: true }, { text: "Sampai besok" }, { text: "Senang bertemu denganmu" }],
+    [{ text: "Sampai besok" }, { text: "Salam penutup / beserta salam", correct: true }, { text: "Senang bertemu denganmu" }],
     "“Tepat. Perpisahan yang baik harus tetap terdengar indah.”",
     "“Haha, lebih tepatnya salam untukmu. Semoga harimu tetap indah.”",
     "jafar_end",
@@ -392,7 +392,7 @@ const HENDRIK: Record<string, DialogueNode> = {
   ...quizBlock(
     "q_kalem", "hendrik", "kalem",
     "Apa arti “kalem”?",
-    [{ text: "Tenang", correct: true }, { text: "Marah" }, { text: "Teliti" }],
+    [{ text: "Marah" }, { text: "Teliti" }, { text: "Tenang", correct: true }],
     "“Benar. Kalau kau panik, orang lain akan melihat kelemahanmu.”",
     "“Aku juga bisa bersikap seperti itu. Tapi aku lebih memilih untuk tenang.”",
     "hendrik_end",
@@ -427,7 +427,7 @@ const FENG: Record<string, DialogueNode> = {
   ...quizBlock(
     "q_angpao", "feng", "angpao",
     "Apa isi “angpao”?",
-    [{ text: "Kertas ucapan" }, { text: "Uang", correct: true }, { text: "Surat perjanjian" }],
+    [{ text: "Kertas" }, { text: "Uang", correct: true }, { text: "Surat" }],
     "“Nah, bener! Waktu kecil dapet sedikit aja udah seneng banget rasanya. Amplop merah ini bawa rezeki.”",
     "“Hahaha, masa isinya kertas kosong! Bukan sembarang lembaran loh. Isinya uang merah!”",
     "feng_2",
@@ -445,7 +445,7 @@ const FENG: Record<string, DialogueNode> = {
   ...quizBlock(
     "q_cincai", "feng", "cincai",
     "Apa arti “cincai”?",
-    [{ text: "Santai / gampang diatur", correct: true }, { text: "Dinego sampai murah sekali" }, { text: "Variatif dan mahal" }],
+    [{ text: "Santai/gampang diatur", correct: true }, { text: "Dinego" }, { text: "Variatif" }],
     "“Tepat! Di mana pun kita berada, berteman baik itu bikin segala urusan gampang. Cincai lah urusannya!”",
     "“Wah bukan! Maksud gue santai aja, gampang diatur kok harganya.”",
     "feng_3",
@@ -461,7 +461,7 @@ const FENG: Record<string, DialogueNode> = {
   ...quizBlock(
     "q_hoki", "feng", "hoki",
     "Hoki berarti mendapatkan…",
-    [{ text: "Kesialan" }, { text: "Arah yang berbeda" }, { text: "Keberuntungan", correct: true }],
+    [{ text: "Sial" }, { text: "Arah yang beda" }, { text: "Keberuntungan", correct: true }],
     "“Betul! Orang-orang suka membeli harapan. Terkadang secercah keberuntungan lebih mahal dari barangnya sendiri.”",
     "“Aduh, nggak mungkin lah! Justru banyak yang mau keberuntungan selalu ada di sisi mereka.”",
     "feng_4",
@@ -478,7 +478,7 @@ const FENG: Record<string, DialogueNode> = {
   ...quizBlock(
     "q_kongkow", "feng", "kongkow",
     "Apa arti “kongkow”?",
-    [{ text: "Berjudi" }, { text: "Nongkrong santai", correct: true }, { text: "Main kartu remi" }],
+    [{ text: "Berjudi" }, { text: "Nongkrong", correct: true }, { text: "Main kartu remi" }],
     "“Nah, benar! Ngobrol ngalor-ngidul, makan camilan, ketawa bareng… buat gue, itu udah cukup bikin capek hilang.”",
     "“Ah, tidak boleh sembarangan! Gue lebih suka nongkrong santai sambil bercerita pengalaman.”",
     "feng_5",
@@ -529,7 +529,7 @@ const KARSA: Record<string, DialogueNode> = {
   ...quizBlock(
     "q_amprok", "karsa", "amprok",
     "Apa arti “amprok”?",
-    [{ text: "Bertemu", correct: true }, { text: "Melambai" }, { text: "Berbincang" }],
+    [{ text: "Bertemu", correct: true }, { text: "Berlambai" }, { text: "Berbincang" }],
     "Ia mengangguk kecil. “Beberapa pertemuan datang tanpa direncanakan, hanya amprok di jalan.”",
     "“Hm… lebih tepatnya sekadar bertemu tanpa sengaja.”",
     "karsa_2",
@@ -547,7 +547,7 @@ const KARSA: Record<string, DialogueNode> = {
   ...quizBlock(
     "q_angen", "karsa", "angen-angen",
     "Apa arti “angen-angen”?",
-    [{ text: "Melamun / berkhayal", correct: true }, { text: "Merasa marah" }, { text: "Bersedih" }],
+    [{ text: "Bersedih" }, { text: "Merasa marah" }, { text: "Melamun", correct: true }],
     "“Tepat. Memikirkan masa depan itu baik, asal jangan sampai tersesat di dalam khayalan semata.”",
     "“Ya, ada juga yang seperti itu. Tapi aku lebih sering melihat orang yang asyik melamun membayangkan hal yang belum terjadi.”",
     "karsa_3",
@@ -565,7 +565,7 @@ const KARSA: Record<string, DialogueNode> = {
   ...quizBlock(
     "q_jongjon", "karsa", "jongjon",
     "Apa arti “jongjon”?",
-    [{ text: "Tetap tabah / tenang", correct: true }, { text: "Tergesa-gesa" }, { text: "Terhuyung" }],
+    [{ text: "Terhuyung" }, { text: "Tergesa-gesa" }, { text: "Tetap tabah", correct: true }],
     "“Tepat sekali. Hidup ini terlalu sebentar jika kita tidak tenang menghadapinya.”",
     "“Bukan. Jongjon itu artinya tetap teguh, tabah dan tidak mudah goyah meski keadaan berubah.”",
     "karsa_4",
@@ -582,7 +582,7 @@ const KARSA: Record<string, DialogueNode> = {
   ...quizBlock(
     "q_siloka", "karsa", "siloka",
     "Apa arti “siloka”?",
-    [{ text: "Amsal / perumpamaan", correct: true }, { text: "Catatan utang dagang" }, { text: "Jurnal pelaut" }],
+    [{ text: "Amsal / perumpamaan", correct: true }, { text: "Catatan dagang" }, { text: "Jurnal pelaut" }],
     "“Benar. Kadang manusia lebih mudah memahami kehidupan lewat cerita dan perumpamaan.”",
     "“Kurasa yang ini jauh lebih bermakna. Siloka adalah amsal yang membuat hidup lebih mudah dipahami.”",
     "karsa_5",
@@ -599,9 +599,9 @@ const KARSA: Record<string, DialogueNode> = {
   ...quizBlock(
     "q_cep", "karsa", "cep",
     "Apa arti “cep”?",
-    [{ text: "Diam / tenang", correct: true }, { text: "Makan cepat" }, { text: "Pergi cepat" }],
+    [{ text: "Makan" }, { text: "Diam / tenang", correct: true }, { text: "Pergi cepat" }],
     "“Iya, aku menyuruh mereka diam. Aku lebih suka jika suasana kiosku tenang.”",
-    "“Artinya diam. Kadang tenang dan tidak berisik lebih berguna daripada banyak bicara.”",
+    "“Artinya diam. Kadang tenang and tidak berisik lebih berguna daripada banyak bicara.”",
     "karsa_end",
   ),
   karsa_end: {
@@ -632,7 +632,7 @@ const THOMAS: Record<string, DialogueNode> = {
   ...quizBlock(
     "q_amplop", "thomas", "amplop",
     "Apa arti “amplop”?",
-    [{ text: "Sampul kertas untuk surat", correct: true }, { text: "Kunci brankas" }, { text: "Perhiasan berharga" }],
+    [{ text: "Perhiasan" }, { text: "Kunci" }, { text: "Surat", correct: true }],
     "“Tepat. Setidaknya ada satu benda di toko ini yang terasa familiar bagimu. Komunikasi itu penting.”",
     "“Bukan, ini untuk membungkus surat saja. Surat-surat berharga untuk ratu.”",
     "thomas_2",
@@ -650,7 +650,7 @@ const THOMAS: Record<string, DialogueNode> = {
   ...quizBlock(
     "q_ngetem", "thomas", "ngetem",
     "Apa arti “ngetem”?",
-    [{ text: "Menunggu / berhenti lama", correct: true }, { text: "Berlayar super cepat" }, { text: "Diisi komoditas penuh" }],
+    [{ text: "Menunggu waktu", correct: true }, { text: "Berlayar cepat" }, { text: "Diisi komoditas" }],
     "“Benar. Dan sayangnya menunggu tanpa kepastian adalah bagian terbesar dari perdagangan laut.”",
     "“Keinginan saya sih itu. Faktanya, kapal saya harus berhenti dan menunggu cukup lama.”",
     "thomas_3",
@@ -666,7 +666,7 @@ const THOMAS: Record<string, DialogueNode> = {
   ...quizBlock(
     "q_oper", "thomas", "oper",
     "Apa arti “oper”?",
-    [{ text: "Mengalihkan / memberikan ke pihak lain", correct: true }, { text: "Dibuang ke laut" }, { text: "Disimpan dalam brankas" }],
+    [{ text: "Mengalihkan / memberikan ke orang lain", correct: true }, { text: "Buang ke tempat lain" }, { text: "Menyimpan barang" }],
     "“Tepat. Barang ini terlalu berharga untuk ditaruh di sembarang tempat, jadi harus dipindahkan ke asisten saya.”",
     "“Tidak persis. Oper berarti memindahkan atau memberikan benda tersebut pada orang lain.”",
     "thomas_4",
@@ -683,7 +683,7 @@ const THOMAS: Record<string, DialogueNode> = {
   ...quizBlock(
     "q_setop", "thomas", "setop",
     "Apa arti “setop”?",
-    [{ text: "Berangkatkan" }, { text: "Berhenti", correct: true }, { text: "Pindahkan" }],
+    [{ text: "Berangkatkan" }, { text: "Berhentikan", correct: true }, { text: "Pindahkan" }],
     "“Exactly. Akhirnya ada orang yang mengerti instruksi sederhana tanpa harus saya jelaskan panjang lebar.”",
     "“Buat apa saya minta dipindahkan? Saya meminta Anda menghentikan apa yang Anda lakukan. Setop itu berhenti.”",
     "thomas_5",
@@ -734,7 +734,7 @@ const JOAO: Record<string, DialogueNode> = {
   ...quizBlock(
     "q_bobo", "joao", "bobo",
     "Apa arti “bobo”?",
-    [{ text: "Tidur", correct: true }, { text: "Makan banyak" }, { text: "Muntah" }],
+    [{ text: "Tidur", correct: true }, { text: "Makan" }, { text: "Muntah" }],
     "“Benar! Kadang mereka tidur begitu cepat sampai-sampai masih memegang tali layar.”",
     "“Ah, kamu sedikit salah paham. Bobo artinya mereka langsung terlelap tidur.”",
     "joao_2",
@@ -751,7 +751,7 @@ const JOAO: Record<string, DialogueNode> = {
   ...quizBlock(
     "q_lentera", "joao", "lentera",
     "Apa arti “lentera”?",
-    [{ text: "Lampu penerang", correct: true }, { text: "Senter besar" }, { text: "Kompas navigasi" }],
+    [{ text: "Senter" }, { text: "Lampu", correct: true }, { text: "Kompas" }],
     "“Benar. Cahaya kecil di lautan kadang jauh lebih menenangkan daripada lampu-lampu di kota besar.”",
     "“Bukan kompas. Lentera adalah lampu minyak. Cahaya redupnya terasa menenangkan di tengah kelamnya laut.”",
     "joao_3",
@@ -768,9 +768,9 @@ const JOAO: Record<string, DialogueNode> = {
   ...quizBlock(
     "q_perlente", "joao", "perlente",
     "Apa arti “perlente”?",
-    [{ text: "Norak" }, { text: "Suka berantem" }, { text: "Rapih dan necis", correct: true }],
+    [{ text: "Norak" }, { text: "Ribet" }, { text: "Rapih", correct: true }],
     "“Tepat! Laut boleh saja berantakan, ombak boleh saja mengamuk. Tapi penampilanku tidak boleh kalah.”",
-    "“Tidak, tidak. Baju saya terlalu rapih dan necis. Makanya orang bilang pakaian saya ini perlente.”",
+    "“Tidak, tidak. Baju saya terlalu rapih and necis. Makanya orang bilang pakaian saya ini perlente.”",
     "joao_4",
   ),
   joao_4: {
@@ -785,7 +785,7 @@ const JOAO: Record<string, DialogueNode> = {
   ...quizBlock(
     "q_pesiar", "joao", "pesiar",
     "Apa arti “pesiar”?",
-    [{ text: "Berlayar mengarungi samudra" }, { text: "Berjalan-jalan santai", correct: true }, { text: "Berjualan kecil-kecilan" }],
+    [{ text: "Berlayar" }, { text: "Jalan-jalan", correct: true }, { text: "Berjualan kecil-kecilan" }],
     "“Benar. Awalnya terasa menyenangkan karena hanya untuk bersantai. Lalu tiba-tiba hidupmu habis di tengah lautan.”",
     "“Bukan pelayaran berat. Pesiar lebih ke sekadar berjalan-jalan bersantai menikmati indahnya pantai.”",
     "joao_5",
@@ -801,7 +801,7 @@ const JOAO: Record<string, DialogueNode> = {
   ...quizBlock(
     "q_olala", "joao", "olala",
     "Apa arti “olala”?",
-    [{ text: "Ragu" }, { text: "Takut / ngeri" }, { text: "Senang / takjub", correct: true }],
+    [{ text: "Ragu" }, { text: "Takut" }, { text: "Senang", correct: true }],
     "“Ya! Olala biasanya keluar spontan kalau kita melihat sesuatu yang menakjubkan atau merasa gembira.”",
     "“Itu hal yang berbeda. Saat aku takjub dan senang, aku mengatakan ‘Olala’. Cobalah nanti!”",
     "joao_end",
