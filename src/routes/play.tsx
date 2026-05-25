@@ -121,14 +121,10 @@ function Play() {
         return mcX < npc.x ? mcRightImg : mcLeftImg;
       }
     }
-    if (mode === "explore" && walking) {
+    if (walking) {
       return facing === "left" ? mcLeftImg : mcRightImg;
     }
-    // Idle in explore: keep last-facing direction instead of resetting to front
-    if (mode === "explore") {
-      return facing === "left" ? mcLeftImg : mcRightImg;
-    }
-    return mcImg; // front view in other modes
+    return mcImg; // front view when idle
   }, [mode, activeNpc, walking, facing, mcX]);
 
   // Persist
