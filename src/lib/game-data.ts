@@ -80,6 +80,135 @@ const V = (
 ): VocabWord => ({ id, original, language, literal, betawi, example, level });
 
 export const VOCABULARY: Record<string, VocabWord> = {
+  // ==========================================
+  // COMMON WORDS (Dari Tabel)
+  // ==========================================
+  halo_arab: V("halo_arab", "مرحبًا (Marhaban)", "Arab", "Halo/Hai", "Halo/Hai", "", "common"),
+  halo_belanda: V("halo_belanda", "Hallo", "Belanda", "Halo/Hai", "Halo/Hai", "", "common"),
+  halo_tiongkok: V("halo_tiongkok", "你好 (Nǐ hǎo)", "Tiongkok", "Halo/Hai", "Halo/Hai", "", "common"),
+  halo_kawi: V("halo_kawi", "Swasti", "Kawi", "Halo/Hai", "Halo/Hai", "", "common"),
+  halo_inggris: V("halo_inggris", "Hello/Hi", "Inggris", "Halo/Hai", "Halo/Hai", "", "common"),
+
+  sapa_pagi_arab: V("sapa_pagi_arab", "صَبَاحُ الخَيْرِ (Shabahul Khair), نَهَارُكَ سَعِيْد (Nahaaruka Sa'iid), مَسَاءُالخَيْرِ (Masaa'ul Khair), لَيْلَتُكَ سَعِيْدَةٌ (Laylatuka Sa'iid)", "Arab", "Selamat pagi/siang/sore/malam", "Selamet pagi/siang/sore/malem", "", "common"),
+  sapa_pagi_belanda: V("sapa_pagi_belanda", "Goedenochtend/middag/navond", "Belanda", "Selamat pagi/siang/sore/malam", "Selamet pagi/siang/sore/malem", "", "common"),
+  sapa_pagi_tiongkok: V("sapa_pagi_tiongkok", "早安 (Zǎo ān) / 午安 (Wǔ ān) / 早上好 (Zǎoshàng hǎo) / 晚安 (Wǎn’ān)", "Tiongkok", "Selamat pagi/siang/sore/malam", "Selamet pagi/siang/sore/malem", "", "common"),
+  sapa_pagi_kawi: V("sapa_pagi_kawi", "Swasti ring enjing/tengahi dina/sonten/wengi", "Kawi", "Selamat pagi/siang/sore/malam", "Selamet pagi/siang/sore/malem", "", "common"),
+  sapa_pagi_inggris: V("sapa_pagi_inggris", "Good morning/afternoon/evening/night", "Inggris", "Selamat pagi/siang/sore/malam", "Selamet pagi/siang/sore/malem", "", "common"),
+
+  kabar_arab: V("kabar_arab", "كَيْفَ حَالُك؟ (Kayfa haaluk?)", "Arab", "Apa kabar?", "Ape kabar?", "", "common"),
+  kabar_belanda: V("kabar_belanda", "Hoe gaat het?", "Belanda", "Apa kabar?", "Ape kabar?", "", "common"),
+  kabar_tiongkok: V("kabar_tiongkok", "你好吗? (Nǐ hǎo ma)", "Tiongkok", "Apa kabar?", "Ape kabar?", "", "common"),
+  kabar_kawi: V("kabar_kawi", "Kadi kabarta?", "Kawi", "Apa kabar?", "Ape kabar?", "", "common"),
+  kabar_inggris: V("kabar_inggris", "How are you?", "Inggris", "Apa kabar?", "Ape kabar?", "", "common"),
+
+  senang_temu_arab: V("senang_temu_arab", "تشَرَّفْتُ بِمَعْرِفَتِك (Tasharraftu bima'rifatik)", "Arab", "Senang bertemu dengan Anda", "Seneng ketemu ente", "", "common"),
+  senang_temu_belanda: V("senang_temu_belanda", "Aangenaam kennis te maken", "Belanda", "Senang bertemu dengan Anda", "Seneng ketemu ente", "", "common"),
+  senang_temu_tiongkok: V("senang_temu_tiongkok", "很高兴认识你 (Hěn gāoxìng rènshí nǐ)", "Tiongkok", "Senang bertemu dengan Anda", "Seneng ketemu ente", "", "common"),
+  senang_temu_kawi: V("senang_temu_kawi", "Sukha tanemu ring sira", "Kawi", "Senang bertemu dengan Anda", "Seneng ketemu ente", "", "common"),
+  senang_temu_inggris: V("senang_temu_inggris", "Nice to meet you", "Inggris", "Senang bertemu dengan Anda", "Seneng ketemu ente", "", "common"),
+
+  nama_saya_arab: V("nama_saya_arab", "اسْمِي... (Ismii...)", "Arab", "Nama saya…", "Nama ane...", "", "common"),
+  nama_saya_belanda: V("nama_saya_belanda", "Ik heet...", "Belanda", "Nama saya…", "Nama ane...", "", "common"),
+  nama_saya_tiongkok: V("nama_saya_tiongkok", "我叫…… (Wǒ jiào... )", "Tiongkok", "Nama saya…", "Nama ane...", "", "common"),
+  nama_saya_kawi: V("nama_saya_kawi", "Aran ingwan...", "Kawi", "Nama saya…", "Nama ane...", "", "common"),
+  nama_saya_inggris: V("nama_saya_inggris", "My name is...", "Inggris", "Nama saya…", "Nama ane...", "", "common"),
+
+  siapa_nama_arab: V("siapa_nama_arab", "مَا اسْمُكَ؟ (Maa ismuka? - laki-laki) / مَا اسْمُكِ؟ (Maa ismuki? - perempuan)", "Arab", "Siapa nama Anda?", "Siape nama ente?", "", "common"),
+  siapa_nama_belanda: V("siapa_nama_belanda", "Hoe heet jij?", "Belanda", "Siapa nama Anda?", "Siape nama ente?", "", "common"),
+  siapa_nama_tiongkok: V("siapa_nama_tiongkok", "你叫什么名字？ (Nǐ jiào shénme míngzì?)", "Tiongkok", "Siapa nama Anda?", "Siape nama ente?", "", "common"),
+  siapa_nama_kawi: V("siapa_nama_kawi", "Sapa aranira?", "Kawi", "Siapa nama Anda?", "Siape nama ente?", "", "common"),
+  siapa_nama_inggris: V("siapa_nama_inggris", "What is your name?", "Inggris", "Siapa nama Anda?", "Siape nama ente?", "", "common"),
+
+  dari_mana_arab: V("dari_mana_arab", "مِنْ أَيْنَ أَنْتَ؟ (Min ayna anta? - laki-laki) / مِنْ أَيْنَ أَنْتِ؟ (Min ayna anti? - perempuan)", "Arab", "Dari mana Anda berasal?", "Ente asalnya dari mane?", "", "common"),
+  dari_mana_belanda: V("dari_mana_belanda", "Waar komt u vandaan?", "Belanda", "Dari mana Anda berasal?", "Ente asalnya dari mane?", "", "common"),
+  dari_mana_tiongkok: V("dari_mana_tiongkok", "你来自哪里？ (Nǐ láizì nǎlǐ?)", "Tiongkok", "Dari mana Anda berasal?", "Ente asalnya dari mane?", "", "common"),
+  dari_mana_kawi: V("dari_mana_kawi", "Saking pundi sira?", "Kawi", "Dari mana Anda berasal?", "Ente asalnya dari mane?", "", "common"),
+  dari_mana_inggris: V("dari_mana_inggris", "Where are you from?", "Inggris", "Dari mana Anda berasal?", "Ente asalnya dari mane?", "", "common"),
+
+  asal_saya_arab: V("asal_saya_arab", "أَنَا مِنْ... (Ana min...)", "Arab", "Saya berasal dari...", "Ane dari...", "", "common"),
+  asal_saya_belanda: V("asal_saya_belanda", "Ik kom uit...", "Belanda", "Saya berasal dari...", "Ane dari...", "", "common"),
+  asal_saya_tiongkok: V("asal_saya_tiongkok", "我来自… (Wǒ láizì…)", "Tiongkok", "Saya berasal dari...", "Ane dari...", "", "common"),
+  asal_saya_kawi: V("asal_saya_kawi", "Ingsun saking...", "Kawi", "Saya berasal dari...", "Ane dari...", "", "common"),
+  asal_saya_inggris: V("asal_saya_inggris", "I am from...", "Inggris", "Saya berasal dari...", "Ane dari...", "", "common"),
+
+  berapa_usia_arab: V("berapa_usia_arab", "كَمْ عُمْرُكَ؟ (Kam 'umruka? - laki-laki) / كَمْ عُمْرُكِ؟ (Kam 'umruki? - perempuan)", "Arab", "Berapa usia Anda?", "Umur ente berape?", "", "common"),
+  berapa_usia_belanda: V("berapa_usia_belanda", "Hoe oud bent u?", "Belanda", "Berapa usia Anda?", "Umur ente berape?", "", "common"),
+  berapa_usia_tiongkok: V("berapa_usia_tiongkok", "你今年多大？ (Nǐ jīnnián duōdà?)", "Tiongkok", "Berapa usia Anda?", "Umur ente berape?", "", "common"),
+  berapa_usia_kawi: V("berapa_usia_kawi", "Pira yusa nira?", "Kawi", "Berapa usia Anda?", "Umur ente berape?", "", "common"),
+  berapa_usia_inggris: V("berapa_usia_inggris", "How old are you?", "Inggris", "Berapa usia Anda?", "Umur ente berape?", "", "common"),
+
+  usia_saya_arab: V("usia_saya_arab", "عُمْرِي... ('Umrii...)", "Arab", "Usia saya...", "Umur ane ... taun.", "", "common"),
+  usia_saya_belanda: V("usia_saya_belanda", "Ik ben ... jaar oud.", "Belanda", "Usia saya...", "Umur ane ... taun.", "", "common"),
+  usia_saya_tiongkok: V("usia_saya_tiongkok", "我今年…岁。 (Wǒ jīnnián ... suì.)", "Tiongkok", "Usia saya...", "Umur ane ... taun.", "", "common"),
+  usia_saya_kawi: V("usia_saya_kawi", "Yusa ingwang ... warsa", "Kawi", "Usia saya...", "Umur ane ... taun.", "", "common"),
+  usia_saya_inggris: V("usia_saya_inggris", "I am ... years old.", "Inggris", "Usia saya...", "Umur ane ... taun.", "", "common"),
+
+  hobi_saya_arab: V("hobi_saya_arab", "هِوَايَتِي... (Hiwaayatii…)", "Arab", "Hobi saya...", "Hobi ane...", "", "common"),
+  hobi_saya_belanda: V("hobi_saya_belanda", "Mijn hobby is.../Mijn hobby's zijn...", "Belanda", "Hobi saya...", "Hobi ane...", "", "common"),
+  hobi_saya_tiongkok: V("hobi_saya_tiongkok", "我的爱好是… (Wǒ de àihào shì…)", "Tiongkok", "Hobi saya...", "Hobi ane...", "", "common"),
+  hobi_saya_kawi: V("hobi_saya_kawi", "Priya ingwang...", "Kawi", "Hobi saya...", "Hobi ane...", "", "common"),
+  hobi_saya_inggris: V("hobi_saya_inggris", "My hobby is... / My hobbies are...", "Inggris", "Hobi saya...", "Hobi ane...", "", "common"),
+
+  terimakasih_arab: V("terimakasih_arab", "شُكْرًا (Syukran)", "Arab", "Terima kasih.", "Terima kasih ye.", "", "common"),
+  terimakasih_belanda: V("terimakasih_belanda", "Dank u wel.", "Belanda", "Terima kasih.", "Terima kasih ye.", "", "common"),
+  terimakasih_tiongkok: V("terimakasih_tiongkok", "谢谢 (Xièxie)", "Tiongkok", "Terima kasih.", "Terima kasih ye.", "", "common"),
+  terimakasih_kawi: V("terimakasih_kawi", "Suksma", "Kawi", "Terima kasih.", "Terima kasih ye.", "", "common"),
+  terimakasih_inggris: V("terimakasih_inggris", "Thank you.", "Inggris", "Terima kasih.", "Terima kasih ye.", "", "common"),
+
+  sampai_jumpa_arab: V("sampai_jumpa_arab", "إِلَى اللِّقَاءِ (Ila l-liqaa')", "Arab", "Sampai jumpa.", "Sampe ketemu lagi ye.", "", "common"),
+  sampai_jumpa_belanda: V("sampai_jumpa_belanda", "Tot ziens.", "Belanda", "Sampai jumpa.", "Sampe ketemu lagi ye.", "", "common"),
+  sampai_jumpa_tiongkok: V("sampai_jumpa_tiongkok", "再见 (Zàijiàn)", "Tiongkok", "Sampai jumpa.", "Sampe ketemu lagi ye.", "", "common"),
+  sampai_jumpa_kawi: V("sampai_jumpa_kawi", "Punar temu", "Kawi", "Sampai jumpa.", "Sampe ketemu lagi ye.", "", "common"),
+  sampai_jumpa_inggris: V("sampai_jumpa_inggris", "See you.", "Inggris", "Sampai jumpa.", "Sampe ketemu lagi ye.", "", "common"),
+
+  saya_arab: V("saya_arab", "أَنَا (Ana)", "Arab", "Saya/Aku", "Ane/Aye/Gue", "", "common"),
+  saya_belanda: V("saya_belanda", "Ik", "Belanda", "Saya/Aku", "Ane/Aye/Gue", "", "common"),
+  saya_tiongkok: V("saya_tiongkok", "我 (Wǒ)", "Tiongkok", "Saya/Aku", "Ane/Aye/Gue", "", "common"),
+  saya_kawi: V("saya_kawi", "Ingsun", "Kawi", "Saya/Aku", "Ane/Aye/Gue", "", "common"),
+  saya_inggris: V("saya_inggris", "I/Me", "Inggris", "Saya/Aku", "Ane/Aye/Gue", "", "common"),
+
+  kamu_arab: V("kamu_arab", "أَنْتَ (Anta - laki-laki) / أَنْتِ (Anti - perempuan)", "Arab", "Anda/Kamu", "Ente/Lu", "", "common"),
+  kamu_belanda: V("kamu_belanda", "U/Jij", "Belanda", "Anda/Kamu", "Ente/Lu", "", "common"),
+  kamu_tiongkok: V("kamu_tiongkok", "你 (Nǐ)", "Tiongkok", "Anda/Kamu", "Ente/Lu", "", "common"),
+  kamu_kawi: V("kamu_kawi", "Sira", "Kawi", "Anda/Kamu", "Ente/Lu", "", "common"),
+  kamu_inggris: V("kamu_inggris", "You", "Inggris", "Anda/Kamu", "Ente/Lu", "", "common"),
+
+  ibu_arab: V("ibu_arab", "أُمِّي (Ummii)", "Arab", "Ibu", "Emak/Nyak", "", "common"),
+  ibu_belanda: V("ibu_belanda", "Moeder", "Belanda", "Ibu", "Emak/Nyak", "", "common"),
+  ibu_tiongkok: V("ibu_tiongkok", "妈妈 (Māma)", "Tiongkok", "Ibu", "Emak/Nyak", "", "common"),
+  ibu_kawi: V("ibu_kawi", "Ibu", "Kawi", "Ibu", "Emak/Nyak", "", "common"),
+  ibu_inggris: V("ibu_inggris", "Mother/Mom", "Inggris", "Ibu", "Emak/Nyak", "", "common"),
+
+  bapak_arab: V("bapak_arab", "أَبِي (Abii)", "Arab", "Bapak", "Babe", "", "common"),
+  bapak_belanda: V("bapak_belanda", "Vader", "Belanda", "Bapak", "Babe", "", "common"),
+  bapak_tiongkok: V("bapak_tiongkok", "爸爸 (Bàba)", "Tiongkok", "Bapak", "Babe", "", "common"),
+  bapak_kawi: V("bapak_kawi", "Rama", "Kawi", "Bapak", "Babe", "", "common"),
+  bapak_inggris: V("bapak_inggris", "Father/Dad", "Inggris", "Bapak", "Babe", "", "common"),
+
+  kakek_belanda: V("kakek_belanda", "Opa", "Belanda", "Kakek", "Engkong", "", "common"),
+  kakek_kawi: V("kakek_kawi", "Aki", "Kawi", "Kakek", "Engkong", "", "common"),
+  kakek_inggris: V("kakek_inggris", "Grandfather/Grandpa", "Inggris", "Kakek", "Engkong", "", "common"),
+
+  nenek_belanda: V("nenek_belanda", "Oma", "Belanda", "Nenek", "Nyai", "", "common"),
+  nenek_kawi: V("nenek_kawi", "Nini", "Kawi", "Nenek", "Nyai", "", "common"),
+  nenek_inggris: V("nenek_inggris", "Grandmother/Grandma", "Inggris", "Nenek", "Nyai", "", "common"),
+
+  kakak_belanda: V("kakak_belanda", "Broer/Zus", "Belanda", "Kakak", "Abang/Mpok", "", "common"),
+  kakak_kawi: V("kakak_kawi", "Raka", "Kawi", "Kakak", "Abang/Mpok", "", "common"),
+  kakak_inggris: V("kakak_inggris", "Older Brother/Older Sister", "Inggris", "Kakak", "Abang/Mpok", "", "common"),
+
+  adik_belanda: V("adik_belanda", "Broertje/Zusje", "Belanda", "Adik", "Ade", "", "common"),
+  adik_kawi: V("adik_kawi", "Adi", "Kawi", "Adik", "Ade", "", "common"),
+  adik_inggris: V("adik_inggris", "Younger Brother/Younger Sister", "Inggris", "Adik", "Ade", "", "common"),
+
+  paman_belanda: V("paman_belanda", "Oom", "Belanda", "Paman", "Encang/Om", "", "common"),
+  paman_kawi: V("paman_kawi", "Wa", "Kawi", "Paman", "Encang/Om", "", "common"),
+  paman_inggris: V("paman_inggris", "Uncle", "Inggris", "Paman", "Encang/Om", "", "common"),
+
+  bibi_belanda: V("bibi_belanda", "Tante", "Belanda", "Bibi", "Encing/Tante", "", "common"),
+  bibi_kawi: V("bibi_kawi", "Bibi", "Kawi", "Bibi", "Encing/Tante", "", "common"),
+  bibi_inggris: V("bibi_inggris", "Auntie", "Inggris", "Bibi", "Encing/Tante", "", "common"),
+
   // ARAB — Jafar
   ane: V("ane", "ane", "Arab", "Saya / aku", "Ane — kata ganti orang pertama (saya)", "“Ane mah orang Betawi asli, bang.”"),
   gahwe: V("gahwe", "gahwe", "Arab", "Kopi (qahwa)", "Kopi — minuman hitam pahit", "“Yuk ngopi dulu sebelum kerja.”"),
