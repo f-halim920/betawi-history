@@ -209,6 +209,32 @@ export const VOCABULARY: Record<string, VocabWord> = {
   bibi_kawi: V("bibi_kawi", "Bibi", "Kawi", "Bibi", "Encing/Tante", "", "common"),
   bibi_inggris: V("bibi_inggris", "Auntie", "Inggris", "Bibi", "Encing/Tante", "", "common"),
 
+  // PORTUGIS — Common Words
+  halo_portugis: V("halo_portugis", "Ola", "Portugis", "Halo/Hai", "Halo/Hai", "", "common"),
+  sapa_pagi_portugis: V("sapa_pagi_portugis", "Bom dia/tarde/tarde/noite", "Portugis", "Selamat pagi/siang/sore/malam", "Selamet pagi/siang/sore/malem", "", "common"),
+  kabar_portugis: V("kabar_portugis", "Como está?/Tudo bem?", "Portugis", "Apa kabar?", "Ape kabar?", "", "common"),
+  senang_temu_portugis: V("senang_temu_portugis", "Prazer em conhecê-lo(a)", "Portugis", "Senang bertemu dengan Anda", "Seneng ketemu ente", "", "common"),
+  nama_saya_portugis: V("nama_saya_portugis", "Chamo-me.../Meu nome é...", "Portugis", "Nama saya…", "Nama ane...", "", "common"),
+  siapa_nama_portugis: V("siapa_nama_portugis", "Como se chama?/Qual é o seu nome?", "Portugis", "Siapa nama Anda?", "Siape nama ente?", "", "common"),
+  dari_mana_portugis: V("dari_mana_portugis", "De onde você é?", "Portugis", "Dari mana Anda berasal?", "Ente asalnya dari mane?", "", "common"),
+  asal_saya_portugis: V("asal_saya_portugis", "Eu sou de...", "Portugis", "Saya berasal dari...", "Ane dari...", "", "common"),
+  berapa_usia_portugis: V("berapa_usia_portugis", "Quantos anos você tem?", "Portugis", "Berapa usia Anda?", "Umur ente berape?", "", "common"),
+  usia_saya_portugis: V("usia_saya_portugis", "Eu tenho ... anos.", "Portugis", "Usia saya...", "Umur ane ... taun.", "", "common"),
+  hobi_saya_portugis: V("hobi_saya_portugis", "Meu hobby é...", "Portugis", "Hobi saya...", "Hobi ane...", "", "common"),
+  terimakasih_portugis: V("terimakasih_portugis", "Obrigado(a).", "Portugis", "Terima kasih.", "Terima kasih ye.", "", "common"),
+  sampai_jumpa_portugis: V("sampai_jumpa_portugis", "Até logo.", "Portugis", "Sampai jumpa.", "Sampe ketemu lagi ye.", "", "common"),
+  saya_portugis: V("saya_portugis", "Eu", "Portugis", "Saya/Aku", "Ane/Aye/Gue", "", "common"),
+  kamu_portugis: V("kamu_portugis", "Você / Tu", "Portugis", "Anda/Kamu", "Ente/Lu", "", "common"),
+  ibu_portugis: V("ibu_portugis", "Mãe", "Portugis", "Ibu", "Emak/Nyak", "", "common"),
+  bapak_portugis: V("bapak_portugis", "Pai", "Portugis", "Bapak", "Babe", "", "common"),
+  kakek_portugis: V("kakek_portugis", "Avô", "Portugis", "Kakek", "Engkong", "", "common"),
+  nenek_portugis: V("nenek_portugis", "Avó", "Portugis", "Nenek", "Nyai", "", "common"),
+  kakak_portugis: V("kakak_portugis", "Irmão mais velho/Irmã mais velha", "Portugis", "Kakak", "Abang/Mpok", "", "common"),
+  adik_portugis: V("adik_portugis", "Irmão mais novo/Irmã mais nova", "Portugis", "Adik", "Ade", "", "common"),
+  paman_portugis: V("paman_portugis", "Tio", "Portugis", "Paman", "Encang/Om", "", "common"),
+  bibi_portugis: V("bibi_portugis", "Tia", "Portugis", "Bibi", "Encing/Tante", "", "common"),
+
+
   // ARAB — Jafar
   ane: V("ane", "ane", "Arab", "Saya / aku", "Ane — kata ganti orang pertama (saya)", "“Ane mah orang Betawi asli, bang.”", "advance"),
   gahwe: V("gahwe", "gahwe", "Arab", "Kopi (qahwa)", "Kopi — minuman hitam pahit", "“Yuk ngopi dulu sebelum kerja.”", "advance"),

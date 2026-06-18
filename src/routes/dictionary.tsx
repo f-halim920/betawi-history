@@ -54,7 +54,8 @@ function Dictionary() {
   }, [lang, level, query]);
 
   const total = Object.keys(VOCABULARY).length;
-  const collectedInLang = ALL_WORDS_BY_LANG[lang].filter((w) => words.has(w.id)).length;
+  const totalUnlocked = Object.values(VOCABULARY).filter((w) => w.level === "common" || words.has(w.id)).length;
+  const collectedInLang = ALL_WORDS_BY_LANG[lang].filter((w) => w.level === "common" || words.has(w.id)).length;
 
   return (
     <div className="min-h-screen bg-background text-foreground">
@@ -93,7 +94,7 @@ function Dictionary() {
         {/* Language tabs */}
         <div className="mx-auto flex max-w-6xl gap-1 overflow-x-auto px-4 pb-3">
           {LANGS.map((L) => {
-            const c = ALL_WORDS_BY_LANG[L].filter((w) => words.has(w.id)).length;
+            const c = ALL_WORDS_BY_LANG[L].filter((w) => w.level === "common" || words.has(w.id)).length;
             const tot = ALL_WORDS_BY_LANG[L].length;
             const active = L === lang;
             return (
@@ -145,7 +146,7 @@ function Dictionary() {
           <p className="font-mono-pixel text-lg text-muted-foreground">
             <span className="text-primary">{LANG_META[lang].tag}</span> · terkumpul{" "}
             <span className="font-pixel text-[10px] text-primary">{collectedInLang}/{ALL_WORDS_BY_LANG[lang].length}</span>
-            {" · "}total <span className="font-pixel text-[10px] text-gold">{words.size}/{total}</span>
+            {" · "}total <span className="font-pixel text-[10px] text-gold">{totalUnlocked}/{total}</span>
           </p>
         </div>
         <div className="mb-6 h-3 w-full border-2 border-border bg-background">
@@ -163,7 +164,7 @@ function Dictionary() {
         ) : (
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {list.map((w) => {
-              const got = words.has(w.id);
+              const got = w.level === "common" || words.has(w.id);
               return (
                 <button
                   key={w.id}
@@ -208,7 +209,7 @@ function Dictionary() {
           </div>
         )}
 
-        {words.size === 0 && (
+        {totalUnlocked === 0 && (
           <div className="mt-8 border-4 border-dashed border-primary bg-card/40 p-8 text-center">
             <p className="font-mono-pixel text-xl text-muted-foreground">
               Kamus masih terkunci. Mulai petualangan Chaer untuk membuka kata-kata!
