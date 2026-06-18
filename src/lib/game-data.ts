@@ -210,46 +210,46 @@ export const VOCABULARY: Record<string, VocabWord> = {
   bibi_inggris: V("bibi_inggris", "Auntie", "Inggris", "Bibi", "Encing/Tante", "", "common"),
 
   // ARAB — Jafar
-  ane: V("ane", "ane", "Arab", "Saya / aku", "Ane — kata ganti orang pertama (saya)", "“Ane mah orang Betawi asli, bang.”"),
-  gahwe: V("gahwe", "gahwe", "Arab", "Kopi (qahwa)", "Kopi — minuman hitam pahit", "“Yuk ngopi dulu sebelum kerja.”"),
-  sohib: V("sohib", "sohib", "Arab", "Teman, sahabat", "Sohib — teman dekat", "“Si Doel itu sohib gua dari kecil.”"),
-  tajir: V("tajir", "tajir", "Arab", "Pedagang kaya, makmur", "Tajir — kaya raya", "“Sejak buka usaha, dia jadi tajir melintir.”"),
-  wassalam: V("wassalam", "wassalam", "Arab", "Beserta salam (salam penutup)", "Wassalam — salam penutup", "“Sekian dari ane, wassalam.”", "advance"),
+  ane: V("ane",  "ane", "Arab", "Saya / aku", "Ane — kata ganti orang pertama (saya, "advance")", "“Ane mah orang Betawi asli, bang.”"),
+  gahwe: V("gahwe",  "gahwe", "Arab", "Kopi (qahwa, "advance")", "Kopi — minuman hitam pahit", "“Yuk ngopi dulu sebelum kerja.”"),
+  sohib: V("sohib",  "sohib", "Arab", "Teman, sahabat", "Sohib — teman dekat", "“Si Doel itu sohib gua dari kecil.”", "advance"),
+  tajir: V("tajir",  "tajir", "Arab", "Pedagang kaya, makmur", "Tajir — kaya raya", "“Sejak buka usaha, dia jadi tajir melintir.”", "advance"),
+  wassalam: V("wassalam",  "wassalam", "Arab", "Beserta salam (salam penutup, "advance")", "Wassalam — salam penutup", "“Sekian dari ane, wassalam.”", "advance"),
 
   // BELANDA — Hendrik
-  haven: V("haven", "haven", "Belanda", "Pelabuhan", "Haven — pelabuhan (kini jarang dipakai, lihat 'havenrecht')", "“Kapal merapat di haven Tanjung Priok.”", "advance"),
-  kumpeni: V("kumpeni", "compagnie", "Belanda", "Perusahaan / perserikatan dagang (VOC)", "Kumpeni — kompeni, perusahaan dagang Belanda", "“Jaman dulu rakyat dipaksa kerja sama kumpeni.”", "advance"),
-  makelar: V("makelar", "makelaar", "Belanda", "Perantara / broker", "Makelar — perantara jual beli", "“Bapaknya makelar tanah di Tangerang.”"),
-  tekor: V("tekor", "te kort", "Belanda", "Kekurangan, defisit", "Tekor — rugi, kekurangan uang", "“Bulan ini gua tekor gara-gara kondangan terus.”"),
-  kalem: V("kalem", "kalm", "Belanda", "Tenang", "Kalem — santai, tenang", "“Kalem aja bro, masalahnya bisa dibicarain.”"),
+  haven: V("haven",  "haven", "Belanda", "Pelabuhan", "Haven — pelabuhan (kini jarang dipakai, lihat 'havenrecht', "advance")", "“Kapal merapat di haven Tanjung Priok.”", "advance"),
+  kumpeni: V("kumpeni",  "compagnie", "Belanda", "Perusahaan / perserikatan dagang (VOC, "advance")", "Kumpeni — kompeni, perusahaan dagang Belanda", "“Jaman dulu rakyat dipaksa kerja sama kumpeni.”", "advance"),
+  makelar: V("makelar",  "makelaar", "Belanda", "Perantara / broker", "Makelar — perantara jual beli", "“Bapaknya makelar tanah di Tangerang.”", "advance"),
+  tekor: V("tekor",  "te kort", "Belanda", "Kekurangan, defisit", "Tekor — rugi, kekurangan uang", "“Bulan ini gua tekor gara-gara kondangan terus.”", "advance"),
+  kalem: V("kalem",  "kalm", "Belanda", "Tenang", "Kalem — santai, tenang", "“Kalem aja bro, masalahnya bisa dibicarain.”", "advance"),
 
   // TIONGKOK — Feng
-  angpao: V("angpao", "紅包 hóng bāo", "Tiongkok", "Amplop merah berisi uang", "Angpao — amplop berisi uang hadiah", "“Pas Imlek anak-anak nungguin angpao dari om.”"),
-  cincai: V("cincai", "青菜 qīng cài", "Tiongkok", "Santai, terserah, gampang", "Cincai — santai, gampang diatur", "“Harganya cincai lah, yang penting laku.”"),
-  hoki: V("hoki", "福氣 fú qì", "Tiongkok", "Keberuntungan", "Hoki — keberuntungan", "“Lagi hoki nih, lotrenya menang terus.”"),
-  kongkow: V("kongkow", "講古 kóng-kó͘", "Tiongkok", "Bercakap-cakap, berkumpul ngobrol", "Kongkow — nongkrong, ngobrol santai", "“Anak-anak kongkow di warkop tiap malem.”", "advance"),
-  kamsia: V("kamsia", "感謝 kám-siā", "Tiongkok", "Terima kasih", "Kamsia — terima kasih (Hokkien)", "“Kamsia ya udah bantu gua tadi.”"),
+  angpao: V("angpao",  "紅包 hóng bāo", "Tiongkok", "Amplop merah berisi uang", "Angpao — amplop berisi uang hadiah", "“Pas Imlek anak-anak nungguin angpao dari om.”", "advance"),
+  cincai: V("cincai",  "青菜 qīng cài", "Tiongkok", "Santai, terserah, gampang", "Cincai — santai, gampang diatur", "“Harganya cincai lah, yang penting laku.”", "advance"),
+  hoki: V("hoki",  "福氣 fú qì", "Tiongkok", "Keberuntungan", "Hoki — keberuntungan", "“Lagi hoki nih, lotrenya menang terus.”", "advance"),
+  kongkow: V("kongkow",  "講古 kóng-kó͘", "Tiongkok", "Bercakap-cakap, berkumpul ngobrol", "Kongkow — nongkrong, ngobrol santai", "“Anak-anak kongkow di warkop tiap malem.”", "advance"),
+  kamsia: V("kamsia",  "感謝 kám-siā", "Tiongkok", "Terima kasih", "Kamsia — terima kasih (Hokkien, "advance")", "“Kamsia ya udah bantu gua tadi.”"),
 
   // KAWI — Karsa
-  amprok: V("amprok", "amprok", "Kawi", "Bertemu (tak sengaja)", "Amprok — bertemu / berpapasan", "“Tadi gua amprok sama Pak RT di pasar.”", "advance"),
-  "angen-angen": V("angen-angen", "angen-angen", "Kawi", "Lamunan, angan", "Angan-angan — melamun, berkhayal", "“Jangan cuma angan-angan, kerja juga.”"),
-  jongjon: V("jongjon", "jongjon", "Kawi", "Teguh, tabah", "Jongjon — tetap tenang & teguh", "“Hadapi hidup dengan jongjon ya, Mas.”", "advance"),
-  siloka: V("siloka", "siloka", "Kawi", "Perumpamaan, amsal", "Siloka — kiasan / perumpamaan", "“Omongan bapaknya banyak siloka.”", "advance"),
-  cep: V("cep", "cep", "Kawi", "Diam, tenang (perintah)", "Cep — diam, tenang", "“Cep dulu, jangan berisik!”"),
+  amprok: V("amprok",  "amprok", "Kawi", "Bertemu (tak sengaja, "advance")", "Amprok — bertemu / berpapasan", "“Tadi gua amprok sama Pak RT di pasar.”", "advance"),
+  "angen-angen": V("angen-angen",  "angen-angen", "Kawi", "Lamunan, angan", "Angan-angan — melamun, berkhayal", "“Jangan cuma angan-angan, kerja juga.”", "advance"),
+  jongjon: V("jongjon",  "jongjon", "Kawi", "Teguh, tabah", "Jongjon — tetap tenang & teguh", "“Hadapi hidup dengan jongjon ya, Mas.”", "advance"),
+  siloka: V("siloka",  "siloka", "Kawi", "Perumpamaan, amsal", "Siloka — kiasan / perumpamaan", "“Omongan bapaknya banyak siloka.”", "advance"),
+  cep: V("cep",  "cep", "Kawi", "Diam, tenang (perintah, "advance")", "Cep — diam, tenang", "“Cep dulu, jangan berisik!”"),
 
   // INGGRIS — Thomas
-  amplop: V("amplop", "envelope", "Inggris", "Sampul kertas untuk surat", "Amplop — sampul surat", "“Tolong masukin ke amplop coklat ya.”"),
-  ngetem: V("ngetem", "stem", "Inggris", "Menunggu (di tempat)", "Ngetem — menunggu sambil parkir", "“Angkot ngetem di pertigaan dari tadi.”"),
-  oper: V("oper", "over", "Inggris", "Mengalihkan, memberikan ke pihak lain", "Oper — memindahkan / memberi", "“Oper bolanya ke gua dong!”"),
-  setop: V("setop", "stop", "Inggris", "Berhenti", "Setop — berhenti", "“Setop dulu, lampu merah!”"),
-  uskut: V("uskut", "house-coat", "Inggris", "Pakaian rumah", "Uskut — daster / pakaian rumah", "“Mendingan pakai uskut aja di rumah, adem.”", "advance"),
+  amplop: V("amplop",  "envelope", "Inggris", "Sampul kertas untuk surat", "Amplop — sampul surat", "“Tolong masukin ke amplop coklat ya.”", "advance"),
+  ngetem: V("ngetem",  "stem", "Inggris", "Menunggu (di tempat, "advance")", "Ngetem — menunggu sambil parkir", "“Angkot ngetem di pertigaan dari tadi.”"),
+  oper: V("oper",  "over", "Inggris", "Mengalihkan, memberikan ke pihak lain", "Oper — memindahkan / memberi", "“Oper bolanya ke gua dong!”", "advance"),
+  setop: V("setop",  "stop", "Inggris", "Berhenti", "Setop — berhenti", "“Setop dulu, lampu merah!”", "advance"),
+  uskut: V("uskut",  "house-coat", "Inggris", "Pakaian rumah", "Uskut — daster / pakaian rumah", "“Mendingan pakai uskut aja di rumah, adem.”", "advance"),
 
   // PORTUGIS — João
-  bobo: V("bobo", "bobo", "Portugis", "Tidur", "Bobo — tidur (bahasa anak/halus)", "“Adek udah bobo dari tadi.”"),
-  lentera: V("lentera", "lanterna", "Portugis", "Lampu / pelita", "Lentera — lampu minyak", "“Pas mati lampu, nyalain lentera aja.”"),
-  perlente: V("perlente", "pulento / pollente", "Portugis", "Rapi, parlente", "Perlente — necis, rapi", "“Pakaiannya perlente banget kalau ke kantor.”", "advance"),
-  pesiar: V("pesiar", "passear", "Portugis", "Jalan-jalan, berlayar santai", "Pesiar — berjalan-jalan / berlayar", "“Kapal pesiar berlabuh di Bali.”"),
-  olala: V("olala", "olá là", "Portugis", "Seruan kagum / takjub", "Olala — seruan kagum", "“Olala, cakep banget mobilnya!”", "advance"),
+  bobo: V("bobo",  "bobo", "Portugis", "Tidur", "Bobo — tidur (bahasa anak/halus, "advance")", "“Adek udah bobo dari tadi.”"),
+  lentera: V("lentera",  "lanterna", "Portugis", "Lampu / pelita", "Lentera — lampu minyak", "“Pas mati lampu, nyalain lentera aja.”", "advance"),
+  perlente: V("perlente",  "pulento / pollente", "Portugis", "Rapi, parlente", "Perlente — necis, rapi", "“Pakaiannya perlente banget kalau ke kantor.”", "advance"),
+  pesiar: V("pesiar",  "passear", "Portugis", "Jalan-jalan, berlayar santai", "Pesiar — berjalan-jalan / berlayar", "“Kapal pesiar berlabuh di Bali.”", "advance"),
+  olala: V("olala",  "olá là", "Portugis", "Seruan kagum / takjub", "Olala — seruan kagum", "“Olala, cakep banget mobilnya!”", "advance"),
 };
 
 export const ALL_WORDS_BY_LANG: Record<Language, VocabWord[]> = {
