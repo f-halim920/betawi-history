@@ -111,7 +111,7 @@ export const VOCABULARY: Record<string, VocabWord> = {
   senang_temu_inggris: V("senang_temu_inggris", "Nice to meet you", "Inggris", "Senang bertemu dengan Anda", "Seneng ketemu ente", "", "common"),
   senang_temu_portugis: V("senang_temu_portugis", "Prazer em conhecê-lo(a)", "Portugis", "Senang bertemu dengan Anda", "Seneng ketemu ente", "", "common"),
 
-  nama_saya_arab: V("nama_saya_arab", "اسْمِي... (...Ismii)", "Arab", "Nama saya…", "Nama ane...", "", "common"),
+  nama_saya_arab: V("nama_saya_arab", "اسْمِي... (Ismii...)", "Arab", "Nama saya…", "Nama ane...", "", "common"),
   nama_saya_belanda: V("nama_saya_belanda", "Ik heet...", "Belanda", "Nama saya…", "Nama ane...", "", "common"),
   nama_saya_tiongkok: V("nama_saya_tiongkok", "我叫…… (Wǒ jiào...)", "Tiongkok", "Nama saya…", "Nama ane...", "", "common"),
   nama_saya_kawi: V("nama_saya_kawi", "Aran ingwan...", "Kawi", "Nama saya…", "Nama ane...", "", "common"),

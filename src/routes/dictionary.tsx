@@ -27,7 +27,7 @@ const LANG_META: Record<Language, { emoji: string; tag: string }> = {
   Portugis: { emoji: "🇵🇹", tag: "Betawi—Portugis" },
   Kawi: { emoji: "🪔", tag: "Betawi—Kawi" },
   Inggris: { emoji: "🇬🇧", tag: "Betawi—Inggris" },
-  Arab: { emoji: "🕌", tag: "Betawi—Arab" },
+  Arab: { emoji: "🇸🇦", tag: "Betawi—Arab" },
 };
 
 function Dictionary() {
