@@ -1,8 +1,8 @@
 @import "tailwindcss" source(none);
-@source "../src";
 @import "tw-animate-css";
-
 @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&family=Cinzel:wght@500;700&display=swap');
+
+@source "../src";
 
 @custom-variant dark (&:is(.dark *));
 
@@ -147,4 +147,28 @@
 
 .animate-float-up {
   animation: float-up 0.4s ease-out;
+}
+
+/* Kunci orientasi landscape khusus layar kecil (HP) saat main game */
+.landscape-lock {
+  display: none;
+}
+
+@keyframes rotate-hint {
+  0%, 100% { transform: rotate(0deg); }
+  50% { transform: rotate(90deg); }
+}
+
+.rotate-hint {
+  display: inline-block;
+  animation: rotate-hint 1.6s ease-in-out infinite;
+}
+
+@media (max-width: 900px) and (orientation: portrait) {
+  .landscape-lock {
+    display: flex;
+  }
+  .landscape-hide {
+    display: none !important;
+  }
 }

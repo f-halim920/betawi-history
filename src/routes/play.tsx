@@ -90,6 +90,12 @@ function Play() {
   const [walking, setWalking] = useState(false);
   const [bobFrame, setBobFrame] = useState(0);
   const keysRef = useRef<Set<string>>(new Set());
+  const mcXRef = useRef(MC_START_X);
+  const walkTargetRef = useRef<number | null>(null);
+
+  useEffect(() => {
+    mcXRef.current = mcX;
+  }, [mcX]);
 
   const [activeNpc, setActiveNpc] = useState<NpcId | null>(null);
   const [currentId, setCurrentId] = useState<string>("");
@@ -150,6 +156,7 @@ function Play() {
   // Movement
   useEffect(() => {
     if (mode !== "explore") return;
+    walkTargetRef.current = null;
     let raf = 0;
     let last = performance.now();
     let bobT = 0;
@@ -160,14 +167,40 @@ function Play() {
       let dir = 0;
       if (keys.has("ArrowLeft") || keys.has("a") || keys.has("A")) dir -= 1;
       if (keys.has("ArrowRight") || keys.has("d") || keys.has("D")) dir += 1;
+
       if (dir !== 0) {
+        // manual input selalu membatalkan auto-walk
+        walkTargetRef.current = null;
+        const nx = Math.max(MIN_X, Math.min(MAX_X, mcXRef.current + dir * MOVE_SPEED * dt));
+        mcXRef.current = nx;
+        setMcX(nx);
         setFacing(dir > 0 ? "right" : "left");
         setWalking(true);
-        setMcX((x) => Math.max(MIN_X, Math.min(MAX_X, x + dir * MOVE_SPEED * dt)));
         bobT += dt;
         if (bobT > 0.18) {
           bobT = 0;
           setBobFrame((f) => (f + 1) % 2);
+        }
+      } else if (walkTargetRef.current !== null) {
+        const target = walkTargetRef.current;
+        const diff = target - mcXRef.current;
+        if (Math.abs(diff) <= INTERACT_DISTANCE) {
+          // sudah cukup dekat — berhenti, tunggu konfirmasi (tekan E / tombol Ngobrol)
+          walkTargetRef.current = null;
+          setWalking(false);
+          setBobFrame(0);
+        } else {
+          const dirSign = Math.sign(diff);
+          const nx = Math.max(MIN_X, Math.min(MAX_X, mcXRef.current + dirSign * MOVE_SPEED * dt));
+          mcXRef.current = nx;
+          setMcX(nx);
+          setFacing(dirSign > 0 ? "right" : "left");
+          setWalking(true);
+          bobT += dt;
+          if (bobT > 0.18) {
+            bobT = 0;
+            setBobFrame((f) => (f + 1) % 2);
+          }
         }
       } else {
         setWalking(false);
@@ -409,13 +442,13 @@ function Play() {
           <div className="mt-8 grid w-full gap-4 sm:grid-cols-2">
             <SceneCard
               title="🏪 PASAR"
-              desc="Ngobrol sama Jafar (Arab), Feng (Tiongkok), dan Karsa (Kawi)."
+              desc="Ngobrol sama Feng (Tiongkok) dan Karsa (Kawi)."
               img={scenePasar}
               onClick={() => fadeTo(() => { setScene("pasar"); setMode("explore"); setMcX(MC_START_X); setCompletedNpcs(new Set()); })}
             />
             <SceneCard
               title="⚓ PELABUHAN"
-              desc="Temui Hendrik (Belanda), Sir Thomas (Inggris), dan João (Portugis)."
+              desc="Temui Hendrik (Belanda) dan Jafar (Arab)."
               img={scenePelabuhan}
               onClick={() => fadeTo(() => { setScene("pelabuhan"); setMode("explore"); setMcX(MC_START_X); setCompletedNpcs(new Set()); })}
             />
@@ -447,7 +480,13 @@ function Play() {
   const isEnd = mode === "dialogue" && !isTyping && node?.end && lineIndex === (node.lines?.length ?? 0) - 1;
 
   return (
-    <div className="flex h-screen w-screen flex-col items-center justify-center bg-zinc-950 overflow-hidden select-none">
+    <>
+      {/* Overlay ini hanya muncul di layar kecil (HP) saat orientasi potrait */}
+      <div className="landscape-lock fixed inset-0 z-[100] flex-col items-center justify-center gap-4 bg-background p-8 text-center">
+        <span className="rotate-hint text-6xl">📱</span>
+        <p className="font-pixel text-sm text-primary">Putar HP kamu ke mode LANDSCAPE untuk main, ya!</p>
+      </div>
+      <div className="landscape-hide flex h-screen w-screen flex-col items-center justify-center bg-zinc-950 overflow-hidden select-none">
       <div
         className="relative overflow-hidden bg-background text-foreground shadow-2xl border-4 border-primary/20 rounded-md animate-fade-in"
         style={{
@@ -523,7 +562,13 @@ function Play() {
                     : "brightness-95"
                 }`}
                 onClick={() => {
-                  if (mode === "explore" && isNear) startDialogue(npc);
+                  if (mode !== "explore") return;
+                  if (isNear) {
+                    startDialogue(npc);
+                  } else {
+                    // MC otomatis jalan mendekat, berhenti dulu untuk konfirmasi
+                    walkTargetRef.current = npc.x;
+                  }
                 }}
               />
             </div>
@@ -665,33 +710,35 @@ function Play() {
         </div>
       )}
 
+        {/* Mobile D-pad — di dalam frame (pojok kiri-bawah), tampil berdasarkan touchscreen
+            (bukan lebar layar) supaya tetap terlihat walau HP diputar ke landscape */}
+        <div
+          className={`absolute bottom-3 left-3 z-40 hidden gap-3 [@media(pointer:coarse)]:flex touch-none select-none transition-opacity duration-200 ${
+            mode !== "explore" ? "invisible pointer-events-none" : "opacity-90"
+          }`}
+        >
+          <button
+            onPointerDown={(e) => { e.preventDefault(); e.stopPropagation(); e.currentTarget.setPointerCapture(e.pointerId); press("ArrowLeft", true); }}
+            onPointerUp={(e) => { e.stopPropagation(); e.currentTarget.releasePointerCapture(e.pointerId); press("ArrowLeft", false); }}
+            onPointerCancel={() => press("ArrowLeft", false)}
+            className="flex h-12 w-16 items-center justify-center border-4 border-primary bg-card/90 font-pixel text-xl text-primary active:bg-primary active:text-primary-foreground"
+          >
+            ◀
+          </button>
+          <button
+            onPointerDown={(e) => { e.preventDefault(); e.stopPropagation(); e.currentTarget.setPointerCapture(e.pointerId); press("ArrowRight", true); }}
+            onPointerUp={(e) => { e.stopPropagation(); e.currentTarget.releasePointerCapture(e.pointerId); press("ArrowRight", false); }}
+            onPointerCancel={() => press("ArrowRight", false)}
+            className="flex h-12 w-16 items-center justify-center border-4 border-primary bg-card/90 font-pixel text-xl text-primary active:bg-primary active:text-primary-foreground"
+          >
+            ▶
+          </button>
+        </div>
+
         <FadeOverlay active={fade} />
       </div>
-
-      {/* Mobile D-pad — di luar frame agar tidak menutupi karakter */}
-      <div
-        className={`flex gap-4 sm:hidden mt-2 touch-none select-none transition-opacity duration-200 ${
-          mode !== "explore" ? "invisible pointer-events-none" : "opacity-90"
-        }`}
-      >
-        <button
-          onPointerDown={(e) => { e.preventDefault(); e.currentTarget.setPointerCapture(e.pointerId); press("ArrowLeft", true); }}
-          onPointerUp={(e) => { e.currentTarget.releasePointerCapture(e.pointerId); press("ArrowLeft", false); }}
-          onPointerCancel={() => press("ArrowLeft", false)}
-          className="flex h-14 w-20 items-center justify-center border-4 border-primary bg-card/90 font-pixel text-2xl text-primary active:bg-primary active:text-primary-foreground"
-        >
-          ◀
-        </button>
-        <button
-          onPointerDown={(e) => { e.preventDefault(); e.currentTarget.setPointerCapture(e.pointerId); press("ArrowRight", true); }}
-          onPointerUp={(e) => { e.currentTarget.releasePointerCapture(e.pointerId); press("ArrowRight", false); }}
-          onPointerCancel={() => press("ArrowRight", false)}
-          className="flex h-14 w-20 items-center justify-center border-4 border-primary bg-card/90 font-pixel text-2xl text-primary active:bg-primary active:text-primary-foreground"
-        >
-          ▶
-        </button>
       </div>
-    </div>
+    </>
   );
 }
 

@@ -89,7 +89,7 @@ function Landing() {
               <p className="font-pixel text-[10px] uppercase text-gold">📖 Lihat</p>
               <h3 className="mt-2 font-pixel text-xl text-gold">KAMUS</h3>
               <p className="mt-2 font-mono-pixel text-lg text-foreground/90">
-                6 kategori bahasa serapan: Belanda, Tiongkok, Portugis, Kawi, Inggris, Arab.
+                4 kategori bahasa serapan: Belanda, Tiongkok, Kawi, Arab.
               </p>
               <p className="mt-3 font-mono-pixel text-base text-muted-foreground">
                 Terkumpul: <span className="font-pixel text-[10px] text-primary">{words.size}/{total}</span>

@@ -307,15 +307,15 @@ Object.values(VOCABULARY).forEach((w) => ALL_WORDS_BY_LANG[w.language].push(w));
 // ============================================================
 // NPC
 // ============================================================
+// Thomas (Inggris) & João (Portugis) sengaja tidak dimasukkan ke NPCS —
+// dialog & kosakata mereka tetap ada di bawah untuk kemungkinan dipakai lagi nanti.
 export const NPCS: Npc[] = [
   // PASAR
-  { id: "jafar", name: "Jafar", scene: "pasar", x: 22, startNodeId: "jafar_1", language: "Arab", colorClass: "text-gold", role: "Pedagang parfum, kopi, batu akik" },
-  { id: "feng", name: "Feng", scene: "pasar", x: 52, startNodeId: "feng_1", language: "Tiongkok", colorClass: "text-accent", role: "Pedagang sutra & barang mewah" },
-  { id: "karsa", name: "Karsa", scene: "pasar", x: 82, startNodeId: "karsa_1", language: "Kawi", colorClass: "text-betawi", role: "Penjual jamu, kain & pengetahuan lokal" },
+  { id: "feng", name: "Feng", scene: "pasar", x: 35, startNodeId: "feng_1", language: "Tiongkok", colorClass: "text-accent", role: "Pedagang sutra & barang mewah" },
+  { id: "karsa", name: "Karsa", scene: "pasar", x: 65, startNodeId: "karsa_1", language: "Kawi", colorClass: "text-betawi", role: "Penjual jamu, kain & pengetahuan lokal" },
   // PELABUHAN
-  { id: "hendrik", name: "Hendrik", scene: "pelabuhan", x: 22, startNodeId: "hendrik_1", language: "Belanda", colorClass: "text-dutch", role: "Pedagang rempah (VOC)" },
-  { id: "thomas", name: "Sir Thomas", scene: "pelabuhan", x: 52, startNodeId: "thomas_1", language: "Inggris", colorClass: "text-dutch", role: "Pedagang tekstil & alat navigasi" },
-  { id: "joao", name: "João", scene: "pelabuhan", x: 82, startNodeId: "joao_1", language: "Portugis", colorClass: "text-primary", role: "Pelaut singgah dari Portugis" },
+  { id: "hendrik", name: "Hendrik", scene: "pelabuhan", x: 35, startNodeId: "hendrik_1", language: "Belanda", colorClass: "text-dutch", role: "Pedagang rempah (VOC)" },
+  { id: "jafar", name: "Jafar", scene: "pelabuhan", x: 65, startNodeId: "jafar_1", language: "Arab", colorClass: "text-gold", role: "Pedagang parfum, kopi, batu akik" },
 ];
 
 export const NPC_BY_ID = Object.fromEntries(NPCS.map((n) => [n.id, n])) as Record<NpcId, Npc>;

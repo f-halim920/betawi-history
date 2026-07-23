@@ -13,13 +13,15 @@ export const Route = createFileRoute("/dictionary")({
   head: () => ({
     meta: [
       { title: "Kamus — ASAL COMOT" },
-      { name: "description", content: "Kamus kosakata serapan bahasa Betawi dari 6 bahasa." },
+      { name: "description", content: "Kamus kosakata serapan bahasa Betawi." },
     ],
   }),
   component: Dictionary,
 });
 
-const LANGS: Language[] = ["Belanda", "Tiongkok", "Portugis", "Kawi", "Inggris", "Arab"];
+// Inggris & Portugis sengaja tidak ditampilkan di kamus — datanya tetap
+// ada di game-data.ts untuk kemungkinan dipakai lagi nanti.
+const LANGS: Language[] = ["Belanda", "Tiongkok", "Kawi", "Arab"];
 
 const LANG_META: Record<Language, { emoji: string; tag: string }> = {
   Belanda: { emoji: "🇳🇱", tag: "Betawi—Belanda" },
