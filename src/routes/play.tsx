@@ -65,6 +65,7 @@ const MOVE_SPEED = 28;
 const INTERACT_DISTANCE = 10;
 const MIN_X = 4;
 const MAX_X = 96;
+const DRAG_DEADZONE = 14; // px — jarak geser minimum sebelum dianggap gerak, biar tap biasa tidak ke-anggap gesekan
 const GROUND_BOTTOM = "5%";
 const SPRITE_HEIGHT = "h-[40%] sm:h-[46%] max-h-[200px]";
 
@@ -92,6 +93,9 @@ function Play() {
   const keysRef = useRef<Set<string>>(new Set());
   const mcXRef = useRef(MC_START_X);
   const walkTargetRef = useRef<number | null>(null);
+  const dragDirRef = useRef<-1 | 0 | 1>(0);
+  const dragOriginXRef = useRef<number | null>(null);
+  const dragPointerIdRef = useRef<number | null>(null);
 
   useEffect(() => {
     mcXRef.current = mcX;
@@ -157,6 +161,9 @@ function Play() {
   useEffect(() => {
     if (mode !== "explore") return;
     walkTargetRef.current = null;
+    dragDirRef.current = 0;
+    dragOriginXRef.current = null;
+    dragPointerIdRef.current = null;
     let raf = 0;
     let last = performance.now();
     let bobT = 0;
@@ -167,6 +174,7 @@ function Play() {
       let dir = 0;
       if (keys.has("ArrowLeft") || keys.has("a") || keys.has("A")) dir -= 1;
       if (keys.has("ArrowRight") || keys.has("d") || keys.has("D")) dir += 1;
+      if (dir === 0 && dragDirRef.current !== 0) dir = dragDirRef.current;
 
       if (dir !== 0) {
         // manual input selalu membatalkan auto-walk
@@ -373,9 +381,29 @@ function Play() {
     };
   }, [advance, mode, nearestNpc, startDialogue, cancelDialogue]);
 
-  const press = (k: string, down: boolean) => {
-    if (down) keysRef.current.add(k);
-    else keysRef.current.delete(k);
+  // Drag & hold untuk gerak MC di layar sentuh — sentuh di mana saja lalu
+  // geser kiri/kanan (seperti joystick virtual), tahan untuk terus jalan.
+  const onDragStart = (e: React.PointerEvent) => {
+    if (mode !== "explore") return;
+    dragPointerIdRef.current = e.pointerId;
+    dragOriginXRef.current = e.clientX;
+    dragDirRef.current = 0;
+    (e.target as Element).setPointerCapture?.(e.pointerId);
+  };
+
+  const onDragMove = (e: React.PointerEvent) => {
+    if (dragPointerIdRef.current !== e.pointerId || dragOriginXRef.current === null) return;
+    const delta = e.clientX - dragOriginXRef.current;
+    if (delta <= -DRAG_DEADZONE) dragDirRef.current = -1;
+    else if (delta >= DRAG_DEADZONE) dragDirRef.current = 1;
+    else dragDirRef.current = 0;
+  };
+
+  const onDragEnd = (e: React.PointerEvent) => {
+    if (dragPointerIdRef.current !== e.pointerId) return;
+    dragPointerIdRef.current = null;
+    dragOriginXRef.current = null;
+    dragDirRef.current = 0;
   };
 
   // ============ RENDER ============
@@ -486,12 +514,12 @@ function Play() {
         <span className="rotate-hint text-6xl">📱</span>
         <p className="font-pixel text-sm text-primary">Putar HP kamu ke mode LANDSCAPE untuk main, ya!</p>
       </div>
-      <div className="landscape-hide flex h-screen w-screen flex-col items-center justify-center bg-zinc-950 overflow-hidden select-none">
+      <div className="landscape-hide flex h-dvh w-dvw flex-col items-center justify-center bg-zinc-950 overflow-hidden select-none">
       <div
         className="relative overflow-hidden bg-background text-foreground shadow-2xl border-4 border-primary/20 rounded-md animate-fade-in"
         style={{
-          width: "min(100vw, 133.33vh)",
-          height: "min(100vh, 75vw)",
+          width: "min(100dvw, 133.33dvh)",
+          height: "min(100dvh, 75dvw)",
           aspectRatio: "4/3",
         }}
         onClick={mode === "dialogue" ? advance : undefined}
@@ -499,11 +527,22 @@ function Play() {
         <img src={bg} alt="" className="pixel absolute inset-0 h-full w-full object-cover" />
         <div className="absolute inset-0 vignette" />
 
+        {/* Drag & hold zone — sentuh & geser kiri/kanan untuk jalan (di bawah NPC/UI supaya tetap bisa diklik) */}
+        {mode === "explore" && (
+          <div
+            className="absolute inset-0 touch-none"
+            onPointerDown={onDragStart}
+            onPointerMove={onDragMove}
+            onPointerUp={onDragEnd}
+            onPointerCancel={onDragEnd}
+          />
+        )}
+
       {/* Top bar */}
-      <div className="absolute left-0 right-0 top-0 z-30 flex items-center justify-between gap-2 p-3 sm:p-4">
+      <div className="pointer-events-none absolute left-0 right-0 top-0 z-30 flex items-center justify-between gap-2 p-3 sm:p-4">
         <button
           onClick={(e) => { e.stopPropagation(); fadeTo(() => { setScene(null); setMode("scene-select"); }); }}
-          className="border-2 border-primary bg-card/90 px-3 py-2 font-pixel text-[10px] text-primary hover:bg-primary hover:text-primary-foreground"
+          className="pointer-events-auto border-2 border-primary bg-card/90 px-3 py-2 font-pixel text-[10px] text-primary hover:bg-primary hover:text-primary-foreground"
         >
           ← TEMPAT
         </button>
@@ -513,7 +552,7 @@ function Play() {
         <Link
           to="/dictionary"
           onClick={(e) => e.stopPropagation()}
-          className="border-2 border-primary bg-card/90 px-3 py-2 font-pixel text-[10px] text-primary hover:bg-primary hover:text-primary-foreground"
+          className="pointer-events-auto border-2 border-primary bg-card/90 px-3 py-2 font-pixel text-[10px] text-primary hover:bg-primary hover:text-primary-foreground"
         >
           📖 KAMUS
         </Link>
@@ -602,7 +641,7 @@ function Play() {
 
       {/* Explore HUD / Interaction Prompt */}
       {mode === "explore" && (
-        <div className="absolute bottom-4 left-1/2 z-20 -translate-x-1/2">
+        <div className="pointer-events-none absolute bottom-4 left-1/2 z-20 -translate-x-1/2">
           {nearestNpc ? (
             <button
               onClick={() => startDialogue(nearestNpc)}
@@ -611,9 +650,14 @@ function Play() {
               ▼ <span className="hidden sm:inline">Tekan E / Klik</span><span className="inline sm:hidden">TAP</span> — Ngobrol sama {nearestNpc.name}
             </button>
           ) : (
-            <div className="hidden sm:block pointer-events-none whitespace-nowrap border-2 border-primary bg-card/90 px-3 py-1.5 font-mono-pixel text-sm text-foreground shadow-xl sm:text-base">
-              ← → / A D untuk jalan · E / klik karakter untuk ngobrol
-            </div>
+            <>
+              <div className="hidden [@media(pointer:fine)]:block pointer-events-none whitespace-nowrap border-2 border-primary bg-card/90 px-3 py-1.5 font-mono-pixel text-sm text-foreground shadow-xl sm:text-base">
+                ← → / A D untuk jalan · E / klik karakter untuk ngobrol
+              </div>
+              <div className="hidden [@media(pointer:coarse)]:block pointer-events-none whitespace-nowrap border-2 border-primary bg-card/90 px-3 py-1.5 font-mono-pixel text-xs text-foreground shadow-xl">
+                👉 Sentuh & geser kiri/kanan buat jalan · Ketuk karakter buat samperin
+              </div>
+            </>
           )}
         </div>
       )}
@@ -709,31 +753,6 @@ function Play() {
           </div>
         </div>
       )}
-
-        {/* Mobile D-pad — di dalam frame (pojok kiri-bawah), tampil berdasarkan touchscreen
-            (bukan lebar layar) supaya tetap terlihat walau HP diputar ke landscape */}
-        <div
-          className={`absolute bottom-3 left-3 z-40 hidden gap-3 [@media(pointer:coarse)]:flex touch-none select-none transition-opacity duration-200 ${
-            mode !== "explore" ? "invisible pointer-events-none" : "opacity-90"
-          }`}
-        >
-          <button
-            onPointerDown={(e) => { e.preventDefault(); e.stopPropagation(); e.currentTarget.setPointerCapture(e.pointerId); press("ArrowLeft", true); }}
-            onPointerUp={(e) => { e.stopPropagation(); e.currentTarget.releasePointerCapture(e.pointerId); press("ArrowLeft", false); }}
-            onPointerCancel={() => press("ArrowLeft", false)}
-            className="flex h-12 w-16 items-center justify-center border-4 border-primary bg-card/90 font-pixel text-xl text-primary active:bg-primary active:text-primary-foreground"
-          >
-            ◀
-          </button>
-          <button
-            onPointerDown={(e) => { e.preventDefault(); e.stopPropagation(); e.currentTarget.setPointerCapture(e.pointerId); press("ArrowRight", true); }}
-            onPointerUp={(e) => { e.stopPropagation(); e.currentTarget.releasePointerCapture(e.pointerId); press("ArrowRight", false); }}
-            onPointerCancel={() => press("ArrowRight", false)}
-            className="flex h-12 w-16 items-center justify-center border-4 border-primary bg-card/90 font-pixel text-xl text-primary active:bg-primary active:text-primary-foreground"
-          >
-            ▶
-          </button>
-        </div>
 
         <FadeOverlay active={fade} />
       </div>
