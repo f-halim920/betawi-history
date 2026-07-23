@@ -101,6 +101,21 @@ function Play() {
     mcXRef.current = mcX;
   }, [mcX]);
 
+  // Fullscreen — reclaim ruang yang dimakan address bar browser di HP
+  const [isFullscreen, setIsFullscreen] = useState(false);
+  useEffect(() => {
+    const onFsChange = () => setIsFullscreen(!!document.fullscreenElement);
+    document.addEventListener("fullscreenchange", onFsChange);
+    return () => document.removeEventListener("fullscreenchange", onFsChange);
+  }, []);
+  const toggleFullscreen = useCallback(() => {
+    if (document.fullscreenElement) {
+      document.exitFullscreen().catch(() => {});
+    } else {
+      document.documentElement.requestFullscreen?.().catch(() => {});
+    }
+  }, []);
+
   const [activeNpc, setActiveNpc] = useState<NpcId | null>(null);
   const [currentId, setCurrentId] = useState<string>("");
   const [lineIndex, setLineIndex] = useState(0);
@@ -513,6 +528,15 @@ function Play() {
       <div className="landscape-lock fixed inset-0 z-[100] flex-col items-center justify-center gap-4 bg-background p-8 text-center">
         <span className="rotate-hint text-6xl">📱</span>
         <p className="font-pixel text-sm text-primary">Putar HP kamu ke mode LANDSCAPE untuk main, ya!</p>
+        <button
+          onClick={toggleFullscreen}
+          className="mt-2 border-2 border-primary bg-card px-4 py-2 font-pixel text-[10px] text-primary hover:bg-primary hover:text-primary-foreground"
+        >
+          ⛶ {isFullscreen ? "Layar Penuh Aktif" : "Aktifkan Layar Penuh"}
+        </button>
+        <p className="max-w-xs font-mono-pixel text-sm text-muted-foreground">
+          Biar address bar browser nggak makan tempat pas main.
+        </p>
       </div>
       <div className="landscape-hide flex h-dvh w-dvw flex-col items-center justify-center bg-zinc-950 overflow-hidden select-none">
       <div
@@ -546,16 +570,25 @@ function Play() {
         >
           ← TEMPAT
         </button>
-        <p className="hidden font-pixel text-[10px] text-primary text-shadow-pixel sm:block sm:text-xs">
+        <p className="hidden [@media(pointer:fine)]:block font-pixel text-[10px] text-primary text-shadow-pixel sm:text-xs">
           {scene ? SCENE_LABEL[scene] : ""}  · {completedNpcs.size}/{sceneNpcs.length} selesai
         </p>
-        <Link
-          to="/dictionary"
-          onClick={(e) => e.stopPropagation()}
-          className="pointer-events-auto border-2 border-primary bg-card/90 px-3 py-2 font-pixel text-[10px] text-primary hover:bg-primary hover:text-primary-foreground"
-        >
-          📖 KAMUS
-        </Link>
+        <div className="flex items-center gap-2">
+          <button
+            onClick={(e) => { e.stopPropagation(); toggleFullscreen(); }}
+            className="hidden [@media(pointer:coarse)]:block pointer-events-auto border-2 border-primary bg-card/90 px-2.5 py-2 font-pixel text-[10px] text-primary hover:bg-primary hover:text-primary-foreground"
+            aria-label="Layar penuh"
+          >
+            ⛶
+          </button>
+          <Link
+            to="/dictionary"
+            onClick={(e) => e.stopPropagation()}
+            className="pointer-events-auto border-2 border-primary bg-card/90 px-3 py-2 font-pixel text-[10px] text-primary hover:bg-primary hover:text-primary-foreground"
+          >
+            📖 KAMUS
+          </Link>
+        </div>
       </div>
 
       {/* World */}
@@ -641,7 +674,7 @@ function Play() {
 
       {/* Explore HUD / Interaction Prompt */}
       {mode === "explore" && (
-        <div className="pointer-events-none absolute bottom-4 left-1/2 z-20 -translate-x-1/2">
+        <div className="pointer-events-none absolute inset-x-2 bottom-4 z-20 flex justify-center">
           {nearestNpc ? (
             <button
               onClick={() => startDialogue(nearestNpc)}
@@ -651,10 +684,10 @@ function Play() {
             </button>
           ) : (
             <>
-              <div className="hidden [@media(pointer:fine)]:block pointer-events-none whitespace-nowrap border-2 border-primary bg-card/90 px-3 py-1.5 font-mono-pixel text-sm text-foreground shadow-xl sm:text-base">
+              <div className="hidden [@media(pointer:fine)]:block pointer-events-none text-center border-2 border-primary bg-card/90 px-3 py-1.5 font-mono-pixel text-sm text-foreground shadow-xl sm:text-base">
                 ← → / A D untuk jalan · E / klik karakter untuk ngobrol
               </div>
-              <div className="hidden [@media(pointer:coarse)]:block pointer-events-none whitespace-nowrap border-2 border-primary bg-card/90 px-3 py-1.5 font-mono-pixel text-xs text-foreground shadow-xl">
+              <div className="hidden [@media(pointer:coarse)]:block pointer-events-none text-center border-2 border-primary bg-card/90 px-3 py-1.5 font-mono-pixel text-xs text-foreground shadow-xl">
                 👉 Sentuh & geser kiri/kanan buat jalan · Ketuk karakter buat samperin
               </div>
             </>
@@ -665,20 +698,20 @@ function Play() {
       {/* Dialogue box */}
       {mode === "dialogue" && node && line && (
         <div className="absolute bottom-1 left-0 right-0 z-20 px-1.5 sm:px-4">
-          <div className="relative mx-auto max-w-3xl border-2 border-primary bg-card/95 px-2 py-0.5 shadow-2xl backdrop-blur sm:border-4 sm:px-4 sm:py-2">
+          <div className="relative mx-auto max-w-3xl overflow-y-auto max-h-[70dvh] [@media(pointer:coarse)]:max-h-[36dvh] border-2 border-primary bg-card/95 px-2 py-0.5 shadow-2xl backdrop-blur sm:border-4 sm:px-4 sm:py-2">
             {speakerName && (
               <div className={`absolute -top-4 left-3 border-2 border-primary bg-card px-1.5 py-0 font-pixel text-[7px] sm:-top-5 sm:left-4 sm:border-4 sm:px-2 sm:py-0.5 sm:text-[10px] ${speakerColor}`}>
                 {speakerName}
               </div>
             )}
-            
+
             <button
               onClick={(e) => { e.stopPropagation(); cancelDialogue(); }}
               className="absolute -top-4 right-3 border-2 border-primary bg-card px-1.5 py-0 font-pixel text-[7px] text-destructive hover:bg-destructive hover:text-destructive-foreground sm:-top-5 sm:right-4 sm:border-4 sm:px-2 sm:py-0.5 sm:text-[9px]"
             >
               🚪 KELUAR
             </button>
-            <p className="min-h-[1.1rem] font-mono-pixel text-[11px] leading-snug text-foreground sm:min-h-[2rem] sm:text-lg">
+            <p className="min-h-[1.1rem] font-mono-pixel text-[11px] leading-snug text-foreground [@media(pointer:fine)]:sm:min-h-[2rem] [@media(pointer:fine)]:sm:text-lg">
               {line.speaker === "narrator" ? <em>{typed}</em> : typed}
               {isTyping && <span className="ml-1 animate-blink text-primary">▊</span>}
             </p>
@@ -689,7 +722,7 @@ function Play() {
                   <button
                     key={i}
                     onClick={(e) => { e.stopPropagation(); choose(c.nextId); }}
-                    className="group border-2 border-border bg-background/60 px-1.5 py-1 text-left font-mono-pixel text-[11px] text-foreground hover:border-primary hover:bg-primary hover:text-primary-foreground sm:px-2.5 sm:py-1.5 sm:text-lg"
+                    className="group border-2 border-border bg-background/60 px-1.5 py-1 text-left font-mono-pixel text-[11px] text-foreground hover:border-primary hover:bg-primary hover:text-primary-foreground [@media(pointer:fine)]:sm:px-2.5 [@media(pointer:fine)]:sm:py-1.5 [@media(pointer:fine)]:sm:text-lg"
                   >
                     <span className="mr-1.5 font-pixel text-[8px] text-primary group-hover:text-primary-foreground sm:mr-2 sm:text-[9px]">▶</span>
                     {c.text}
